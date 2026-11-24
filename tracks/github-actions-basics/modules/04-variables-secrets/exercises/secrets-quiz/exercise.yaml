@@ -1,0 +1,75 @@
+uid: 870567ae-9faf-483c-9d27-3dd86b43cf21
+slug: secrets-quiz
+title: "Kiểm tra: env, vars, secrets, environments"
+type: quiz
+difficulty: easy
+lesson: environments
+estimatedMinutes: 12
+authors: [github:TienNHM]
+spec:
+  passScore: 0.8
+  questions:
+    - id: q1
+      type: single
+      prompt: "Biến `NAME` khai báo trong `env:` của step 1. Step 2 cùng job chạy `echo \"$NAME\"`. Kết quả?"
+      options: ["In giá trị của NAME", "In chuỗi rỗng", "Job đỏ"]
+      answer: 1
+      explanation: "Biến cấp step chỉ sống trong step đó. Muốn dùng chung thì đặt ở cấp job."
+    - id: q2
+      type: single
+      prompt: "Bạn muốn đổi tên site hiện trong log mà không phải commit. Giá trị đó không bí mật. Cất ở đâu?"
+      options: ["env trong file YAML", "vars trong Settings", "secrets trong Settings"]
+      answer: 1
+      explanation: "`vars` nằm ngoài Git, đổi trong Settings là xong, và không cần che."
+    - id: q3
+      type: single
+      prompt: "Vì sao log hiện `***` thay cho giá trị secret?"
+      options:
+        - "Vì GitHub không gửi giá trị secret tới runner"
+        - "Vì runner biết giá trị secret và thay mọi chỗ trùng đúng chuỗi đó trong log bằng ***"
+        - "Vì bash tự giấu biến môi trường"
+      answer: 1
+      explanation: "Runner nhận giá trị thật (để step dùng được) và che những chỗ trùng đúng chuỗi trước khi gửi log về."
+    - id: q4
+      type: multiple
+      prompt: "Những việc nào có thể làm lộ secret dù GitHub có masking?"
+      options:
+        - "echo secret qua rev hoặc base64"
+        - "Gửi secret tới một trang web lạ bằng curl"
+        - "In độ dài secret bằng ${#TOKEN}"
+        - "Ghi secret ra file rồi upload thành artifact"
+      answer: [0, 1, 3]
+      explanation: "Chuỗi biến đổi không còn trùng; curl và artifact không đi qua log. In độ dài thì không lộ giá trị."
+    - id: q5
+      type: single
+      prompt: "Bạn lỡ in token thật ra log. Việc đầu tiên nên làm?"
+      options:
+        - "Xóa lần chạy đó là đủ"
+        - "Thu hồi token cũ ở nơi cấp, tạo token mới, cập nhật secret (rotate)"
+        - "Đổi tên secret"
+      answer: 1
+      explanation: "Coi như đã mất: người khác có thể đã đọc. Rotate rồi mới sửa workflow."
+    - id: q6
+      type: single
+      prompt: "Job `deploy` có `environment: production` với Required reviewers. Khi nào runner nhận được secret của environment đó?"
+      options:
+        - "Ngay khi lần chạy bắt đầu"
+        - "Chỉ sau khi người duyệt bấm Approve"
+        - "Không bao giờ"
+      answer: 1
+      explanation: "Secret của environment chỉ được gửi sau khi mọi protection rule đã qua."
+    - id: q7
+      type: single
+      prompt: "Vì sao luật nhánh của environment an toàn hơn dòng `if: github.ref == 'refs/heads/main'` trong YAML?"
+      options:
+        - "Vì if chạy chậm hơn"
+        - "Vì luật nằm trong Settings, người sửa được file workflow không sửa được nó"
+        - "Vì if không hỗ trợ nhánh main"
+      answer: 1
+      explanation: "Ai sửa được YAML thì xóa được if; luật của environment cần quyền admin repo."
+    - id: q8
+      type: single
+      prompt: "Workflow chạy trên pull request mở từ một fork. `secrets.DEMO_TOKEN` có giá trị gì?"
+      options: ["Giá trị thật", "Chuỗi rỗng", "***"]
+      answer: 1
+      explanation: "GitHub không gửi secret cho PR từ fork, để người lạ không sửa workflow mà lấy được secret."

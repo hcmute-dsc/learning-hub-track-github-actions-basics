@@ -1,0 +1,11 @@
+uid: 05b10a5b-5974-4733-a6d6-fc4330cd45c2
+slug: actions-basics
+title: "Workflow đầu tiên"
+summary: "Hiểu GitHub Actions thật sự làm gì: event đánh thức workflow, job chạy trên một máy ảo mới tinh gọi là runner. Viết workflow đầu tiên và đọc log để sửa khi một lần chạy bị đỏ."
+lessons:
+  - 01-what-is-actions
+  - 02-first-workflow
+  - 03-read-the-log
+exercises:
+  - actions-quiz
+  - hello-workflow

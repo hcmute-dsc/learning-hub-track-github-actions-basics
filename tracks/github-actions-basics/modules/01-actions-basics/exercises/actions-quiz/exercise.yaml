@@ -1,0 +1,71 @@
+uid: 7d31722a-6516-4aa0-9e1d-e6f25b823519
+slug: actions-quiz
+title: "Kiểm tra: workflow, job, step, runner"
+type: quiz
+difficulty: easy
+lesson: read-the-log
+estimatedMinutes: 10
+authors: [github:TienNHM]
+spec:
+  passScore: 0.8
+  questions:
+    - id: q1
+      type: single
+      prompt: "File workflow phải đặt ở thư mục nào thì GitHub mới chạy?"
+      options: [".github/", ".github/workflows/", "workflows/", ".actions/"]
+      answer: 1
+      explanation: "GitHub chỉ đọc file `.yml`/`.yaml` trong `.github/workflows/` của commit vừa được push."
+    - id: q2
+      type: single
+      prompt: "Vì sao step đầu tiên của job thường là `actions/checkout`?"
+      options:
+        - "Để đăng nhập GitHub"
+        - "Vì runner là máy ảo mới tinh, chưa có code của repo"
+        - "Để workflow chạy nhanh hơn"
+      answer: 1
+      explanation: "Runner bắt đầu trống trơn; checkout clone repo vào máy."
+    - id: q3
+      type: single
+      prompt: "Hai job trong cùng một workflow chạy ở đâu?"
+      options: ["Cùng một máy", "Mỗi job một runner riêng", "Trên máy của bạn"]
+      answer: 1
+      explanation: "Mỗi job có runner riêng. Các step trong cùng một job mới dùng chung máy."
+    - id: q4
+      type: single
+      prompt: "Lần chạy hôm qua đã tạo file `ket-qua.txt` trên runner. Hôm nay workflow chạy lại, file đó còn không?"
+      options:
+        - "Còn, vì cùng một repo"
+        - "Không, máy ảo đã bị xóa sau khi job xong; lần này là máy mới"
+        - "Còn, nếu dùng ubuntu-latest"
+      answer: 1
+      explanation: "Runner do GitHub cấp bị xóa sau mỗi job. Muốn giữ file phải dùng cache hoặc artifact (chương 5)."
+    - id: q5
+      type: single
+      prompt: "Job có 4 step, bị đỏ ở step 2. Bạn nên đọc log ở đâu trước?"
+      options:
+        - "Step 4, vì nó chạy cuối"
+        - "Step 2, đọc từ dưới lên"
+        - "Step 1, đọc từ trên xuống"
+      answer: 1
+      explanation: "Step đỏ đầu tiên là nơi có lỗi; các step sau bị bỏ qua. Dòng nguyên nhân nằm ngay trên dòng `exit code`."
+    - id: q6
+      type: single
+      prompt: "Một lệnh trả về exit code `0`. Điều đó nghĩa là gì?"
+      options: ["Lệnh thất bại", "Lệnh thành công", "Lệnh chưa chạy"]
+      answer: 1
+      explanation: "0 là thành công; mọi số khác 0 là thất bại và làm step đỏ."
+    - id: q7
+      type: multiple
+      prompt: "Workflow có `on:` gồm `push` với `branches: [main]` và `workflow_dispatch`. Những việc nào làm nó chạy?"
+      options:
+        - "Push lên nhánh main"
+        - "Push lên nhánh feat/menu"
+        - "Bấm Run workflow trong tab Actions"
+        - "Mở pull request"
+      answer: [0, 2]
+      explanation: "`push` chỉ tính nhánh `main`; `workflow_dispatch` thêm nút chạy bằng tay; workflow không có `pull_request`."
+    - id: q8
+      type: short_text
+      prompt: "Repo `ten-ban/portfolio`. Step `run: echo ${{ github.repository }}` in ra chữ gì?"
+      answer: ["ten-ban/portfolio"]
+      explanation: "`github.repository` là tên repo dạng `chủ/tên`, được thay vào trước khi lệnh chạy."

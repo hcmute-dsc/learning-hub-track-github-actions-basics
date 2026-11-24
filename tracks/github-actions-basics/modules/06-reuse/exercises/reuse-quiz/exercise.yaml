@@ -1,0 +1,78 @@
+uid: f442cc11-0ce3-4970-9140-64ef8491a54f
+slug: reuse-quiz
+title: "Kiểm tra: reusable workflow, composite action, ghim SHA"
+type: quiz
+difficulty: medium
+lesson: marketplace-safely
+estimatedMinutes: 12
+authors: [github:TienNHM]
+spec:
+  passScore: 0.75
+  questions:
+    - id: q1
+      type: single
+      prompt: "Bạn muốn dùng lại cả job \"test project Node\" ở ba workflow. Chọn gì?"
+      options: ["Composite action", "Reusable workflow với on: workflow_call", "Chép job ba lần"]
+      answer: 1
+      explanation: "Dùng lại cả job (có runner riêng) là việc của reusable workflow."
+    - id: q2
+      type: single
+      prompt: "Gọi reusable workflow ở đâu?"
+      options:
+        - "Trong steps, như một action"
+        - "Ở cấp job: jobs.<tên>.uses, job đó không có runs-on và steps"
+        - "Trong on:"
+      answer: 1
+      explanation: "Reusable workflow gọi ở cấp job; runs-on và steps nằm trong workflow được gọi."
+    - id: q3
+      type: single
+      prompt: "Composite action có step `run: npm ci` nhưng thiếu một khóa nên báo lỗi. Khóa nào?"
+      options: ["runs-on", "shell", "permissions"]
+      answer: 1
+      explanation: "Trong composite action, mọi step run bắt buộc ghi shell."
+    - id: q4
+      type: single
+      prompt: "Job có step đầu là `uses: ./.github/actions/setup-project`, checkout ở step thứ hai. Chuyện gì xảy ra?"
+      options:
+        - "Chạy bình thường"
+        - "Lỗi không tìm thấy action.yml, vì runner chưa có code của repo"
+        - "GitHub tự checkout trước"
+      answer: 1
+      explanation: "Action nằm trong repo; phải checkout trước mới có file action.yml trên runner."
+    - id: q5
+      type: single
+      prompt: "Workflow được gọi cần secret `DEPLOY_TOKEN`. Nó lấy bằng cách nào?"
+      options:
+        - "Tự đọc secrets.DEPLOY_TOKEN của repo gọi"
+        - "Bên được gọi khai báo secret trong workflow_call, bên gọi truyền vào bằng secrets:"
+        - "Không có cách nào"
+      answer: 1
+      explanation: "Secret phải được truyền rõ ràng (hoặc dùng secrets: inherit, đưa sang mọi secret)."
+    - id: q6
+      type: single
+      prompt: "Vì sao ghim action bằng commit SHA an toàn hơn ghim bằng tag `@v4`?"
+      options:
+        - "Vì SHA chạy nhanh hơn"
+        - "Vì tag có thể bị dời sang commit khác, còn SHA tính từ nội dung nên không đổi được"
+        - "Vì tag không được GitHub hỗ trợ"
+      answer: 1
+      explanation: "Vụ tj-actions/changed-files năm 2025: kẻ tấn công dời tag sang commit độc hại."
+    - id: q7
+      type: multiple
+      prompt: "Những cách ghi nào là ghim đúng một action bằng SHA?"
+      options:
+        - "uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1"
+        - "uses: actions/checkout@3d3c42e"
+        - "uses: actions/checkout@main"
+        - "uses: actions/checkout@v7"
+      answer: [0]
+      explanation: "Phải đủ 40 ký tự. SHA rút gọn không được chấp nhận; @main là nhánh, @v7 là tag."
+    - id: q8
+      type: single
+      prompt: "Đã ghim SHA thì action không tự lên bản mới. Làm sao vẫn nhận được bản vá?"
+      options:
+        - "Thôi không cập nhật nữa"
+        - "Bật Dependabot cho github-actions, nó mở PR đổi SHA khi có bản mới"
+        - "Đổi sang @main"
+      answer: 1
+      explanation: "Dependabot mở PR; CI chạy trên PR đó và bạn review trước khi merge."

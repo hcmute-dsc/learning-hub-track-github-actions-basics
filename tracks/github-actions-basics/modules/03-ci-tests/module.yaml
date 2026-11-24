@@ -1,0 +1,11 @@
+uid: 4842356e-0cae-4480-bfff-f50b48ae25a3
+slug: ci-tests
+title: "CI: chạy test tự động trên pull request"
+summary: "Viết test cho một project Node nhỏ, để GitHub Actions chạy npm test trên mỗi pull request, đọc status check xanh/đỏ, và hiểu vì sao các nhóm bắt buộc check xanh trước khi merge."
+lessons:
+  - 01-tests-and-exit-code
+  - 02-ci-workflow
+  - 03-status-checks
+exercises:
+  - ci-quiz
+  - ci-for-pr

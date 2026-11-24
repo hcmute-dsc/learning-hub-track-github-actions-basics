@@ -1,0 +1,73 @@
+uid: 81d2c4d7-3eb4-490c-9088-0a71baff7d3b
+slug: matrix-cache-quiz
+title: "Kiểm tra: matrix, cache, artifact"
+type: quiz
+difficulty: medium
+lesson: artifacts
+estimatedMinutes: 12
+authors: [github:TienNHM]
+spec:
+  passScore: 0.75
+  questions:
+    - id: q1
+      type: short_text
+      prompt: "Matrix có `os: [ubuntu-latest, windows-latest]` và `node-version: [22, 24, 26]`. GitHub tạo bao nhiêu job? (ghi số)"
+      answer: ["6", "sáu"]
+      explanation: "Mọi tổ hợp: 2 × 3 = 6 job."
+    - id: q2
+      type: single
+      prompt: "Matrix `node-version: [22, 24, 26]`, fail-fast để mặc định. Job Node 22 đỏ trong khi 24 và 26 còn đang chạy. Chuyện gì xảy ra?"
+      options:
+        - "24 và 26 chạy tiếp tới cùng"
+        - "24 và 26 bị hủy (cancelled)"
+        - "Cả workflow chạy lại từ đầu"
+      answer: 1
+      explanation: "fail-fast mặc định bật; muốn thấy đủ kết quả thì đặt `fail-fast: false`."
+    - id: q3
+      type: single
+      prompt: "Ruleset bắt buộc check `test`. Bạn thêm matrix 3 phiên bản Node vào job `test`. PR mới bị treo ở trạng thái chờ. Vì sao?"
+      options:
+        - "Vì matrix chạy chậm"
+        - "Vì không còn check nào tên đúng `test`, chỉ có `test (22)`, `test (24)`, `test (26)`"
+        - "Vì ruleset không hỗ trợ matrix"
+      answer: 1
+      explanation: "Sửa ruleset để bắt buộc ba check mới."
+    - id: q4
+      type: single
+      prompt: "Cache key là `npm-Linux-<hash của package-lock.json>`. Bạn chỉ sửa một dòng trong `src/grade.js`. Lần chạy sau là gì?"
+      options: ["Cache hit", "Cache miss", "Partial hit"]
+      answer: 0
+      explanation: "Lockfile không đổi nên hash không đổi, key khớp chính xác."
+    - id: q5
+      type: single
+      prompt: "Bạn thêm một thư viện bằng `npm install` (lockfile đổi). Workflow có `restore-keys: npm-Linux-`. Lần chạy sau thế nào?"
+      options:
+        - "Hit: khôi phục đúng key cũ, không lưu"
+        - "Partial hit: khôi phục cache cũ theo tiền tố, cuối job lưu cache với key mới"
+        - "Miss hoàn toàn: không khôi phục gì"
+      answer: 1
+      explanation: "Key chính không khớp nhưng tiền tố khớp, nên lấy bản cũ, rồi lưu ngăn mới."
+    - id: q6
+      type: single
+      prompt: "Vì sao không nên đặt key cố định, ví dụ `key: npm-cache`?"
+      options:
+        - "Vì key cố định bị GitHub từ chối"
+        - "Vì key đã lưu thì không ghi đè được, cache sẽ cũ mãi kể cả khi thư viện đổi"
+        - "Vì key phải có chữ hoa"
+      answer: 1
+      explanation: "Đưa hash của lockfile vào key để key đổi khi thư viện đổi."
+    - id: q7
+      type: single
+      prompt: "Job `summary` cần đọc file `test-report.txt` do job `test` tạo. Dùng gì?"
+      options: ["Cache", "Artifact: upload ở job test, download ở job summary", "Không cần gì, file tự có"]
+      answer: 1
+      explanation: "Hai job chạy trên hai runner khác nhau; artifact chuyển file trong cùng lần chạy."
+    - id: q8
+      type: single
+      prompt: "Step upload báo cáo test có `if: always()`. Tác dụng là gì?"
+      options:
+        - "Upload kể cả khi step chạy test trước đó đỏ"
+        - "Upload ở mọi lần chạy của mọi workflow"
+        - "Giữ artifact mãi mãi"
+      answer: 0
+      explanation: "Mặc định step bị bỏ qua sau một step đỏ; always() bắt nó vẫn chạy, đúng lúc báo cáo cần nhất."

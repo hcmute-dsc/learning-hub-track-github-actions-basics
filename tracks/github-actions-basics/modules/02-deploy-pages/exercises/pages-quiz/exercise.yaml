@@ -1,0 +1,56 @@
+uid: fa654d4e-33be-49fd-8dd8-8bb3bf4256f8
+slug: pages-quiz
+title: "Kiểm tra: deploy GitHub Pages"
+type: quiz
+difficulty: easy
+lesson: link-check
+estimatedMinutes: 10
+authors: [github:TienNHM]
+spec:
+  passScore: 0.8
+  questions:
+    - id: q1
+      type: single
+      prompt: "Job `deploy` có `needs: check-links`. Nếu `check-links` đỏ thì sao?"
+      options:
+        - "deploy vẫn chạy, nhưng chậm hơn"
+        - "deploy bị bỏ qua, trang cũ giữ nguyên"
+        - "deploy chạy trước rồi mới kiểm tra"
+      answer: 1
+      explanation: "`needs` bắt job chờ và chỉ chạy khi job kia thành công."
+    - id: q2
+      type: multiple
+      prompt: "Job deploy lên Pages cần thêm những quyền nào ngoài `contents: read`?"
+      options: ["pages: write", "id-token: write", "packages: write", "issues: write"]
+      answer: [0, 1]
+      explanation: "`pages: write` để ghi lên Pages, `id-token: write` để Pages xác minh lần deploy đến từ workflow này."
+    - id: q3
+      type: single
+      prompt: "Repo `portfolio` của tài khoản `ten-ban` có trang ở `https://ten-ban.github.io/portfolio/`. Link CSS nào chạy đúng?"
+      options: ["/style.css", "style.css", "C:/portfolio/style.css"]
+      answer: 1
+      explanation: "Link tương đối tính từ trang hiện tại, nên vẫn đúng khi trang nằm trong thư mục con `/portfolio/`."
+    - id: q4
+      type: single
+      prompt: "Runner bị xóa ngay sau job. Vậy trang web đi từ runner tới GitHub Pages bằng cách nào?"
+      options:
+        - "Runner được giữ lại để phục vụ trang web"
+        - "upload-pages-artifact nén thư mục thành artifact cất trên GitHub, deploy-pages bảo Pages lấy artifact đó"
+        - "GitHub Pages tự clone repo của bạn"
+      answer: 1
+      explanation: "Artifact được cất ngoài runner, nên còn tồn tại sau khi máy ảo bị xóa."
+    - id: q5
+      type: single
+      prompt: "Vì sao bài học dùng `lychee --offline`?"
+      options:
+        - "Để chạy không cần mạng trên máy bạn"
+        - "Chỉ kiểm tra link trong repo, nên kết quả không đỏ vì trang ngoài chậm hay chặn bot"
+        - "Vì lychee không kiểm tra được link ra ngoài"
+      answer: 1
+      explanation: "Link ra ngoài kiểm tra được, nhưng dễ đỏ vì lý do ngoài tầm tay, không nên chặn deploy."
+    - id: q6
+      type: single
+      prompt: "Trên pull request, job deploy có `if: github.event_name != 'pull_request'`. Nó hiện thế nào trong tab Actions?"
+      options: ["Đỏ", "Xanh", "Xám (skipped, bị bỏ qua)"]
+      answer: 2
+      explanation: "Điều kiện sai thì job không chạy và hiện là skipped; đó không phải lỗi."
