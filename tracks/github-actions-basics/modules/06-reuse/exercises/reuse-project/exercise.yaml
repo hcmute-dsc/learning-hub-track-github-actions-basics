@@ -1,0 +1,25 @@
+uid: d4651776-01ed-4842-86b6-55620bd05ca3
+slug: reuse-project
+title: "Dọn workflow: không lặp lại, ghim SHA"
+type: project
+difficulty: medium
+lesson: marketplace-safely
+estimatedMinutes: 120
+requiresReview: true
+prerequisites:
+  - github-actions-basics/reuse/reuse-quiz
+  - github-actions-basics/matrix-cache/matrix-cache-practice
+authors: [github:TienNHM]
+spec:
+  deliverable: github_repo_or_pr
+  rubric:
+    - criterion: "Composite action .github/actions/setup-project: có input node-version với default, setup-node có cache npm, run có shell"
+      weight: 2
+    - criterion: "Reusable workflow node-test.yml có on: workflow_call với input bắt buộc; ci.yml gọi nó ở cấp job trong matrix 22/24/26; deploy-demo.yml cũng gọi nó thay cho job test tự viết"
+      weight: 3
+    - criterion: "Không còn đoạn setup-node + npm ci nào bị chép lại ở nhiều workflow"
+      weight: 1
+    - criterion: "Mọi action bên thứ ba (không thuộc actions/) được ghim bằng SHA 40 ký tự kèm chú thích phiên bản; SHA khớp đúng tag ghi trong chú thích"
+      weight: 2
+    - criterion: "Có .github/dependabot.yml cho github-actions và npm; ruleset đã sửa theo tên check mới; PR xanh"
+      weight: 2

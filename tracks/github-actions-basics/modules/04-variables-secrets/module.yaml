@@ -1,0 +1,11 @@
+uid: 118fed85-e378-4b77-9b78-595f71dd3544
+slug: variables-secrets
+title: "Biến, secrets và environments"
+summary: "Phân biệt env, vars và secrets: mỗi loại nằm ở đâu, ai đọc được, vì sao secret bị che thành ***. Dùng environment với protection rules để chỉ deploy khi có người duyệt."
+lessons:
+  - 01-env-and-vars
+  - 02-secrets
+  - 03-environments
+exercises:
+  - secrets-quiz
+  - secrets-practice

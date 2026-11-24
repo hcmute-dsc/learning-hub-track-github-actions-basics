@@ -1,0 +1,69 @@
+uid: a5886e10-238f-494c-95f6-f99a933127e3
+slug: ci-quiz
+title: "Kiểm tra: test, CI và status check"
+type: quiz
+difficulty: easy
+lesson: status-checks
+estimatedMinutes: 10
+authors: [github:TienNHM]
+spec:
+  passScore: 0.8
+  questions:
+    - id: q1
+      type: single
+      prompt: "Một test trượt. `npm test` trả về exit code bao nhiêu, và runner làm gì?"
+      options:
+        - "0, runner chạy tiếp step sau"
+        - "Khác 0, runner đánh step đỏ và dừng job"
+        - "Khác 0, nhưng runner vẫn đánh job xanh"
+      answer: 1
+      explanation: "Test trượt thì `node --test` trả về 1; runner thấy exit code khác 0 nên step đỏ, job dừng."
+    - id: q2
+      type: single
+      prompt: "Vì sao CI dùng `npm ci` thay cho `npm install`?"
+      options:
+        - "Vì npm ci cài nhanh hơn trên máy cá nhân"
+        - "Vì npm ci cài đúng theo lockfile và báo lỗi nếu lockfile không khớp, nên CI kiểm tra đúng thứ bạn đã commit"
+        - "Vì npm install không chạy được trên Linux"
+      answer: 1
+      explanation: "`npm ci` không bao giờ sửa lockfile; lệch là báo lỗi."
+    - id: q3
+      type: single
+      prompt: "Bạn quên commit `package-lock.json`. Step `npm ci` trên runner sẽ thế nào?"
+      options: ["Xanh, tự tạo lockfile", "Đỏ, báo cần có package-lock.json", "Bị bỏ qua"]
+      answer: 1
+      explanation: "`npm ci` cần lockfile có sẵn."
+    - id: q4
+      type: single
+      prompt: "Status check được gắn vào đâu?"
+      options: ["Vào nhánh", "Vào commit đã được kiểm tra", "Vào tài khoản người push"]
+      answer: 1
+      explanation: "Check gắn vào commit; push commit mới thì PR hiện check của commit mới."
+    - id: q5
+      type: single
+      prompt: "CI đã đỏ trên PR nhưng nút Merge vẫn bấm được. Thiếu gì?"
+      options:
+        - "Thiếu badge trong README"
+        - "Thiếu ruleset (hoặc branch protection) bắt buộc check test phải xanh"
+        - "Thiếu `workflow_dispatch`"
+      answer: 1
+      explanation: "Check chỉ báo; required check mới chặn merge."
+    - id: q6
+      type: single
+      prompt: "Ruleset bắt buộc check `test`. Bạn đổi tên job trong `ci.yml` thành `unit-test`. PR mới sẽ thế nào?"
+      options:
+        - "Merge được ngay"
+        - "Treo ở trạng thái chờ (Expected, Waiting for status to be reported) vì không còn check nào tên test"
+        - "GitHub tự đổi tên check trong ruleset"
+      answer: 1
+      explanation: "Tên required check phải khớp tên job; đổi job thì phải sửa ruleset."
+    - id: q7
+      type: multiple
+      prompt: "Test đỏ trên PR của bạn. Những việc nào nên làm?"
+      options:
+        - "Mở log, đọc dòng actual/expected để hiểu test báo gì"
+        - "Sửa test cho xanh ngay, không cần đọc"
+        - "Quyết định yêu cầu có đổi thật không, rồi sửa code hoặc sửa test cho đúng"
+        - "Push commit sửa lên cùng nhánh để CI chạy lại"
+      answer: [0, 2, 3]
+      explanation: "Test đỏ là tín hiệu; hiểu nó trước rồi mới sửa. Push lên cùng nhánh thì PR tự chạy lại."

@@ -1,11 +1,11 @@
-# Track mẫu
+# GitHub Actions cơ bản
 
 Repo nội dung của **một track** trên [HCMUTE DSC Learning Hub](https://learn.hcmute-dsc.io.vn). Mỗi track một repo `hcmute-dsc/learning-hub-track-<slug>`, cùng tạo từ template [`learning-hub-track-template`](https://github.com/hcmute-dsc/learning-hub-track-template) ([ADR-10](https://github.com/hcmute-dsc/learning-hub-docs/blob/main/docs/product/DECISIONS.md#adr-10--mỗi-track-một-repo-learning-hub-content-thành-registry)).
 
 ## Cấu trúc
 
 ```
-tracks/example-track/        # đúng MỘT thư mục, tên = slug của track
+tracks/github-actions-basics/        # đúng MỘT thư mục, tên = slug của track
   track.yaml                 # thông tin track + danh sách chương
   docs/setup.md              # tuỳ chọn: trang "Cài đặt" (cài công cụ, tự kiểm tra bài)
   docs/resources.md          # tuỳ chọn: trang "Tài liệu thêm"

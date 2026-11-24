@@ -1,0 +1,11 @@
+uid: 79ba5f99-f935-4147-9141-0c8cee8a901b
+slug: workflow-security
+title: "Bảo mật workflow"
+summary: "Workflow cầm chìa khóa repo của bạn. Cấp permissions tối thiểu cho GITHUB_TOKEN, hiểu vì sao PR từ fork bị hạn chế và vì sao pull_request_target nguy hiểm, và chặn script injection."
+lessons:
+  - 01-permissions-token
+  - 02-fork-pull-requests
+  - 03-script-injection
+exercises:
+  - security-quiz
+  - security-review

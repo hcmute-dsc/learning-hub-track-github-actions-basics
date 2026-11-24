@@ -1,0 +1,8 @@
+uid: 7202aa57-e85b-4971-892a-3d29257d9403
+slug: final-project
+title: "Dự án cuối"
+summary: "Dựng pipeline CI/CD hoàn chỉnh cho một repo của chính bạn: test trên pull request, deploy có kiểm soát, an toàn theo chương 7. Nộp bằng pull request, mentor review theo rubric."
+lessons:
+  - 01-project-guide
+exercises:
+  - final-project

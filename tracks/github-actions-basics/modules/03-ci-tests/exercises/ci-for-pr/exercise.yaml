@@ -1,0 +1,24 @@
+uid: 5200fb23-8ab3-4400-8b70-02d7985c2765
+slug: ci-for-pr
+title: "CI chặn merge cho repo diem-trung-binh"
+type: project
+difficulty: medium
+lesson: status-checks
+estimatedMinutes: 90
+requiresReview: true
+prerequisites:
+  - github-actions-basics/ci-tests/ci-quiz
+authors: [github:TienNHM]
+spec:
+  deliverable: github_repo_or_pr
+  rubric:
+    - criterion: "ci.yml chạy trên pull_request và push lên main; setup-node có node-version; dùng npm ci rồi npm test; permissions: contents: read"
+      weight: 3
+    - criterion: "Hàm isPassed có test đủ ca, kể cả mốc biên 5 điểm; package-lock.json đã commit, node_modules không có trong repo"
+      weight: 2
+    - criterion: "PR có lịch sử: một commit làm check test đỏ, một commit sửa cho xanh; mô tả PR giải thích lần đỏ là gì"
+      weight: 2
+    - criterion: "Ruleset Active trên main: bắt buộc PR và bắt buộc check test; có ảnh chụp hoặc mô tả chứng minh"
+      weight: 2
+    - criterion: "README có badge CI trỏ đúng ci.yml của repo"
+      weight: 1

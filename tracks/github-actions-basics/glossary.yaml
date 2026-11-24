@@ -1,0 +1,541 @@
+# Từ vựng của track (TEACHING.md T1, CONTENT-SPECIFICATION §3.1c).
+# Site tạo từ file này: tab "Từ vựng", hộp "Từ mới trong bài" của mỗi bài (từ `terms:`
+# trong front matter của bài), và chú thích ở lần đầu từ đó xuất hiện trong bài.
+#
+#   term       bắt buộc  chữ người học gặp, giữ tiếng Anh
+#   expansion            dạng đầy đủ, khi term là viết tắt hoặc rút gọn
+#   literal              nghĩa đen của chữ, tiếng Việt
+#   meaning    bắt buộc  nó làm gì trong track này, một hai câu
+#   example              một lệnh hoặc một dòng có dùng chữ này
+#   see                  từ liên quan, phải có trong file này
+
+# Chương 1
+- term: GitHub Actions
+  literal: các hành động của GitHub
+  meaning: Dịch vụ của GitHub tự chạy các việc (test, build, deploy) mỗi khi có chuyện xảy ra trong repo, trên máy của GitHub.
+  see: [workflow, runner]
+
+- term: workflow
+  literal: quy trình làm việc
+  meaning: Một file YAML trong .github/workflows/ mô tả khi nào chạy (event) và chạy những job nào.
+  example: .github/workflows/hello.yml
+  see: [event, job]
+
+- term: event
+  literal: sự kiện
+  meaning: Chuyện xảy ra trong repo làm workflow chạy, khai báo ở khóa on, ví dụ push hay pull_request.
+  example: "on: push"
+  see: [workflow]
+
+- term: job
+  literal: công việc
+  meaning: Một nhóm step chạy trên cùng một runner. Các job mặc định chạy song song, mỗi job một máy riêng.
+  see: [step, runner, needs]
+
+- term: step
+  literal: bước
+  meaning: Một bước trong job, hoặc chạy lệnh shell (run), hoặc dùng một action (uses). Các step chạy lần lượt trên cùng một máy.
+  example: "run: npm test"
+  see: [job, action]
+
+- term: runner
+  literal: người chạy
+  meaning: Máy ảo mới tinh mà GitHub cấp để chạy một job. Chưa có code của bạn, chạy xong thì bị xóa.
+  example: "runs-on: ubuntu-latest"
+  see: [job, checkout]
+
+- term: action
+  literal: hành động
+  meaning: Một gói step viết sẵn để dùng lại, gọi bằng uses kèm phiên bản.
+  example: "uses: actions/checkout@v7"
+  see: [step, composite action, Marketplace]
+
+- term: YAML
+  expansion: YAML Ain't Markup Language
+  literal: YAML không phải ngôn ngữ đánh dấu
+  meaning: Cách viết dữ liệu dễ đọc bằng khóa, giá trị, danh sách và thụt lề bằng dấu cách. File workflow viết bằng YAML.
+  example: "runs-on: ubuntu-latest"
+
+- term: checkout
+  literal: lấy ra
+  meaning: Action actions/checkout clone repo của bạn vào runner. Thiếu nó, runner không có file nào của repo.
+  example: "uses: actions/checkout@v7"
+  see: [runner]
+
+- term: expression
+  literal: biểu thức
+  meaning: Đoạn viết trong dấu ${{ }}; GitHub tính và thay bằng giá trị thật trước khi gửi lệnh tới runner.
+  example: "${{ github.sha }}"
+  see: [context, script injection]
+
+- term: context
+  literal: ngữ cảnh
+  meaning: Một nhóm thông tin GitHub chuẩn bị sẵn để đọc trong biểu thức, như github, env, vars, secrets, matrix, inputs.
+  example: "${{ github.repository }}"
+  see: [expression]
+
+- term: workflow_dispatch
+  literal: phát lệnh chạy workflow
+  meaning: Event thêm nút Run workflow trong tab Actions để chạy workflow bằng tay.
+  example: "on: workflow_dispatch"
+  see: [event]
+
+- term: log
+  literal: nhật ký
+  meaning: Mọi dòng chữ các lệnh in ra trong một lần chạy, xem trong tab Actions theo từng step.
+  see: [exit code]
+
+- term: exit code
+  literal: mã thoát
+  meaning: Con số một lệnh trả về khi kết thúc. 0 là thành công; khác 0 là thất bại và làm step đỏ.
+  example: "echo $?"
+  see: [log]
+
+- term: re-run
+  literal: chạy lại
+  meaning: Chạy lại một lần chạy với đúng commit cũ trên runner mới, dùng khi lỗi không do code (mạng, lỗi tạm thời).
+  see: [log]
+
+- term: actionlint
+  literal: công cụ soi lỗi action
+  meaning: Chương trình kiểm tra file workflow trên máy trước khi push, bắt lỗi cú pháp, biểu thức và một số lỗi bảo mật.
+  example: "docker run --rm -v \"$(pwd):/repo\" -w /repo rhysd/actionlint:1.7.12 -color"
+  see: [script injection]
+
+# Chương 2
+- term: GitHub Pages
+  literal: các trang của GitHub
+  meaning: Dịch vụ phục vụ trang web tĩnh (HTML, CSS, ảnh) miễn phí từ một repo public.
+  example: "https://ten-ban.github.io/portfolio/"
+  see: [deploy]
+
+- term: deploy
+  literal: triển khai
+  meaning: Đưa phiên bản mới lên chỗ người dùng truy cập được, ví dụ lên GitHub Pages hay lên server.
+  see: [CD, environment]
+
+- term: artifact
+  literal: sản phẩm, đồ tạo tác
+  meaning: File hoặc thư mục một job gửi lên GitHub để còn lại sau khi runner bị xóa; job khác hoặc người dùng tải về theo tên.
+  example: "uses: actions/upload-artifact@v7"
+  see: [upload-artifact, download-artifact, cache]
+
+- term: permissions
+  literal: các quyền
+  meaning: Khóa trong workflow nói GITHUB_TOKEN của job được làm gì, ví dụ contents read, pages write. Ghi ở cấp job thì thay hẳn cấp workflow.
+  example: "permissions: { contents: read }"
+  see: [GITHUB_TOKEN, least privilege]
+
+- term: environment
+  literal: môi trường
+  meaning: Một đích deploy có tên (github-pages, production), có secrets, variables và luật bảo vệ riêng.
+  example: "environment: production"
+  see: [protection rule, staging, production]
+
+- term: concurrency
+  literal: tính đồng thời
+  meaning: Khóa gom các lần chạy cùng group để chúng xếp hàng hoặc hủy nhau, thay vì chạy chồng lên nhau.
+  example: "concurrency: { group: pages, cancel-in-progress: false }"
+
+- term: CI
+  expansion: Continuous Integration
+  literal: tích hợp liên tục
+  meaning: Mỗi thay đổi đều được tự động build và kiểm tra trước khi gộp vào nhánh chính.
+  see: [CD, pipeline]
+
+- term: CD
+  expansion: Continuous Delivery / Continuous Deployment
+  literal: giao hàng liên tục / triển khai liên tục
+  meaning: Code đã qua kiểm tra được tự động đưa lên nơi người dùng truy cập.
+  see: [CI, deploy]
+
+- term: lychee
+  literal: quả vải
+  meaning: Công cụ đọc file HTML và kiểm tra từng link; với --offline chỉ kiểm tra link trong repo.
+  example: "lychee --offline '**/*.html'"
+
+- term: needs
+  literal: cần
+  meaning: Khóa bắt một job chờ job khác xong và chỉ chạy khi job đó xanh.
+  example: "needs: check-links"
+  see: [job]
+
+- term: if
+  literal: nếu
+  meaning: Điều kiện của job hoặc step; điều kiện sai thì job hoặc step bị bỏ qua (skipped).
+  example: "if: github.event_name != 'pull_request'"
+  see: [always]
+
+# Chương 3
+- term: test
+  literal: kiểm thử
+  meaning: Đoạn code gọi code thật với đầu vào đã biết và khẳng định kết quả phải đúng một giá trị đã biết.
+  example: "npm test"
+  see: [assertion]
+
+- term: assertion
+  literal: sự khẳng định
+  meaning: Một câu khẳng định trong test, ví dụ giá trị A phải bằng B; sai thì test trượt.
+  example: "assert.equal(average([8, 9, 10]), 9)"
+  see: [test]
+
+- term: npm
+  expansion: Node Package Manager
+  literal: trình quản lý gói của Node
+  meaning: Công cụ đi kèm Node.js để cài thư viện và chạy các lệnh tắt trong package.json.
+  example: "npm test"
+  see: [package.json, npm ci]
+
+- term: package.json
+  literal: file mô tả gói
+  meaning: File lý lịch của project Node, gồm tên, thư viện cần dùng và các lệnh tắt trong scripts.
+  see: [npm, lockfile]
+
+- term: lockfile
+  literal: file khóa
+  meaning: File package-lock.json ghi chính xác phiên bản mọi thư viện đã cài, để mọi máy cài giống hệt nhau. Luôn commit nó.
+  see: [npm ci, hash]
+
+- term: pull request
+  literal: yêu cầu kéo, yêu cầu gộp
+  meaning: Lời đề nghị gộp các commit trên một nhánh vào nhánh khác (thường là main), để người khác xem và CI kiểm tra trước.
+  see: [merge, status check]
+
+- term: setup-node
+  literal: cài đặt Node
+  meaning: Action actions/setup-node cài đúng phiên bản Node.js lên runner, có thể bật cache npm.
+  example: "uses: actions/setup-node@v7"
+  see: [cache]
+
+- term: npm ci
+  expansion: npm clean install
+  literal: cài sạch
+  meaning: Lệnh cài thư viện đúng theo lockfile, không bao giờ sửa lockfile, báo lỗi nếu lockfile thiếu hoặc lệch. Dùng trên CI.
+  example: "npm ci"
+  see: [lockfile, npm]
+
+- term: merge
+  literal: gộp
+  meaning: Gộp các commit của một nhánh (thường qua pull request) vào nhánh khác.
+  see: [pull request]
+
+- term: status check
+  literal: kiểm tra trạng thái
+  meaning: Kết quả xanh, đỏ, vàng hay xám mà GitHub gắn vào một commit sau mỗi job; hiện trên trang PR.
+  example: "CI / test (pull_request)"
+  see: [required check]
+
+- term: required check
+  literal: kiểm tra bắt buộc
+  meaning: Status check phải xanh thì mới merge được vào nhánh được bảo vệ. Tên phải khớp tên check thật.
+  see: [ruleset, status check]
+
+- term: ruleset
+  literal: bộ luật
+  meaning: Bộ luật cho nhánh hoặc tag trong Settings, ví dụ bắt buộc PR và bắt buộc check xanh trước khi merge vào main.
+  see: [branch protection, required check]
+
+- term: branch protection
+  literal: bảo vệ nhánh
+  meaning: Cách cũ để đặt luật cho một nhánh (bắt buộc PR, bắt buộc check). Ruleset là cách mới hơn.
+  see: [ruleset]
+
+- term: badge
+  literal: huy hiệu
+  meaning: Ảnh nhỏ trong README hiện passing hoặc failing theo lần chạy gần nhất của một workflow.
+  example: "[![CI](https://github.com/an/diem-trung-binh/actions/workflows/ci.yml/badge.svg)](...)"
+
+# Chương 4
+- term: environment variable
+  literal: biến môi trường
+  meaning: Cặp TÊN=giá trị hệ điều hành đưa cho chương trình đang chạy. Trong run, đọc bằng $TÊN.
+  example: "echo \"$GITHUB_SHA\""
+  see: [env]
+
+- term: env
+  expansion: environment
+  literal: môi trường
+  meaning: Khóa trong workflow tạo biến môi trường ở cấp workflow, job hoặc step.
+  example: "env: { NAME: An }"
+  see: [environment variable, scope, vars]
+
+- term: vars
+  expansion: variables
+  literal: các biến
+  meaning: Biến cấu hình không bí mật cất trong Settings của repo hoặc environment; đổi được mà không cần commit.
+  example: "${{ vars.SITE_NAME }}"
+  see: [env, secret]
+
+- term: scope
+  literal: phạm vi
+  meaning: Phạm vi có hiệu lực. Với env là nơi biến được thấy (workflow, job, step); với permissions là từng nhóm quyền như contents, pages.
+  see: [env, permissions]
+
+- term: secret
+  literal: bí mật
+  meaning: Giá trị nhạy cảm (token, mật khẩu) cất mã hóa trong Settings, chỉ gửi tới job cần nó, bị che thành *** trong log.
+  example: "${{ secrets.DEPLOY_TOKEN }}"
+  see: [masking, rotate, token]
+
+- term: masking
+  literal: che mặt nạ
+  meaning: Runner thay mọi chỗ trùng đúng chuỗi secret trong log bằng ***. Chuỗi đã biến đổi thì không được che.
+  example: "echo \"::add-mask::$GIA_TRI\""
+  see: [secret]
+
+- term: token
+  literal: thẻ, mã thông hành
+  meaning: Chuỗi dài thay cho mật khẩu; ai cầm nó là làm được những việc nó cho phép.
+  see: [GITHUB_TOKEN, secret]
+
+- term: rotate
+  literal: xoay vòng
+  meaning: Thu hồi một token hay mật khẩu cũ và thay bằng cái mới, việc phải làm ngay khi lỡ lộ.
+  see: [secret]
+
+- term: staging
+  literal: sân khấu chuẩn bị
+  meaning: Môi trường giống thật để nhóm thử trước khi đưa lên production.
+  see: [production, environment]
+
+- term: production
+  literal: sản xuất
+  meaning: Môi trường người dùng thật đang dùng, hay gọi tắt là prod.
+  see: [staging, environment]
+
+- term: protection rule
+  literal: luật bảo vệ
+  meaning: Điều kiện của environment phải thỏa trước khi job chạy, như người duyệt, hẹn giờ chờ, nhánh được phép.
+  see: [environment, required reviewers]
+
+- term: required reviewers
+  literal: người duyệt bắt buộc
+  meaning: Luật bắt job dừng chờ một người được chỉ định bấm Approve; secret của environment chỉ tới runner sau đó.
+  see: [protection rule]
+
+# Chương 5
+- term: matrix
+  literal: ma trận
+  meaning: Danh sách giá trị trong strategy; GitHub tạo một job riêng cho mỗi giá trị hoặc mỗi tổ hợp, chạy song song.
+  example: "node-version: [22, 24, 26]"
+  see: [strategy, fail-fast]
+
+- term: strategy
+  literal: chiến lược
+  meaning: Khóa của job mô tả cách tạo các bản của job, chứa matrix và fail-fast.
+  see: [matrix]
+
+- term: fail-fast
+  literal: hỏng thì dừng sớm
+  meaning: Mặc định bật; một job của matrix đỏ thì các job còn lại bị hủy. Đặt false để thấy đủ kết quả.
+  example: "fail-fast: false"
+  see: [matrix]
+
+- term: LTS
+  expansion: Long-Term Support
+  literal: hỗ trợ dài hạn
+  meaning: Phiên bản được sửa lỗi bảo mật trong nhiều năm; Node.js dùng các bản số chẵn làm LTS.
+
+- term: cache
+  literal: bộ nhớ đệm
+  meaning: Chỗ cất tạm trên GitHub để lần chạy sau khôi phục nhanh thứ đã tải, ví dụ thư mục ~/.npm. Có thể mất bất cứ lúc nào.
+  see: [cache key, artifact]
+
+- term: cache key
+  literal: khóa cache
+  meaning: Chuỗi đặt tên cho một ngăn cache; khớp đúng key thì khôi phục. Key đã lưu thì không ghi đè được.
+  example: "npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}"
+  see: [hash, restore-keys]
+
+- term: hash
+  literal: mã băm
+  meaning: Chuỗi tính ra từ nội dung file, như dấu vân tay; đổi một ký tự là ra hash khác.
+  example: "${{ hashFiles('**/package-lock.json') }}"
+  see: [cache key, commit SHA]
+
+- term: cache hit
+  literal: trúng cache
+  meaning: Tìm thấy ngăn cache có key khớp chính xác và khôi phục nó.
+  see: [cache miss]
+
+- term: cache miss
+  literal: trượt cache
+  meaning: Không tìm thấy ngăn cache nào khớp; phải tải lại từ đầu, cuối job lưu ngăn mới.
+  see: [cache hit]
+
+- term: restore-keys
+  literal: các khóa khôi phục
+  meaning: Tiền tố dự phòng khi key chính trượt; khôi phục ngăn mới nhất bắt đầu bằng tiền tố đó (partial hit).
+  example: "npm-${{ runner.os }}-"
+  see: [cache key]
+
+- term: upload-artifact
+  literal: tải artifact lên
+  meaning: Action actions/upload-artifact gửi file lên GitHub thành artifact có tên.
+  example: "uses: actions/upload-artifact@v7"
+  see: [artifact, download-artifact]
+
+- term: download-artifact
+  literal: tải artifact xuống
+  meaning: Action actions/download-artifact lấy artifact theo tên về runner của job hiện tại.
+  example: "uses: actions/download-artifact@v8"
+  see: [artifact, upload-artifact]
+
+- term: retention
+  literal: sự lưu giữ
+  meaning: Số ngày GitHub giữ artifact trước khi xóa, đặt bằng retention-days.
+  example: "retention-days: 7"
+  see: [artifact]
+
+- term: pipefail
+  literal: ống hỏng thì báo hỏng
+  meaning: Tùy chọn của bash làm cả dòng lệnh có ống | thất bại nếu một lệnh bất kỳ trong ống thất bại. GitHub bật sẵn khi chạy bash.
+  example: "npm test 2>&1 | tee test-report.txt"
+  see: [exit code]
+
+- term: always
+  literal: luôn luôn
+  meaning: Hàm dùng trong if để step vẫn chạy kể cả khi step trước đã đỏ.
+  example: "if: always()"
+  see: [if]
+
+# Chương 6
+- term: reusable workflow
+  literal: workflow dùng lại được
+  meaning: Workflow có on workflow_call, được workflow khác gọi ở cấp job như gọi hàm.
+  example: "uses: ./.github/workflows/node-test.yml"
+  see: [workflow_call, composite action, caller]
+
+- term: workflow_call
+  literal: được gọi bởi workflow
+  meaning: Event làm một workflow chỉ chạy khi có workflow khác gọi; khai báo inputs và secrets nó nhận.
+  example: "on: workflow_call"
+  see: [reusable workflow]
+
+- term: caller
+  literal: bên gọi
+  meaning: Workflow chứa job có uses trỏ tới reusable workflow.
+  see: [reusable workflow]
+
+- term: input
+  literal: đầu vào
+  meaning: Giá trị truyền vào action hoặc reusable workflow qua with, đọc bên trong bằng context inputs.
+  example: "${{ inputs.node-version }}"
+  see: [output]
+
+- term: output
+  literal: đầu ra
+  meaning: Giá trị một step, job hoặc action trả ra để chỗ khác đọc, ví dụ đường link trang sau khi deploy Pages.
+  example: "${{ steps.deployment.outputs.page_url }}"
+  see: [input]
+
+- term: DRY
+  expansion: Don't Repeat Yourself
+  literal: đừng lặp lại chính mình
+  meaning: Nguyên tắc viết một lần, dùng lại nhiều nơi, để khi sửa chỉ phải sửa một chỗ.
+  see: [reusable workflow, composite action]
+
+- term: composite action
+  literal: action ghép
+  meaning: Action tự viết bằng YAML, ghép nhiều step thành một; chạy trên runner của job gọi nó.
+  example: "uses: ./.github/actions/setup-project"
+  see: [action.yml, reusable workflow]
+
+- term: action.yml
+  literal: file mô tả action
+  meaning: File định nghĩa một action, gồm name, description, inputs và runs.
+  see: [composite action]
+
+- term: shell
+  literal: vỏ
+  meaning: Chương trình đọc và chạy lệnh, như bash hay PowerShell. Trong composite action, mỗi step run phải ghi shell.
+  example: "shell: bash"
+  see: [composite action]
+
+- term: Marketplace
+  literal: chợ
+  meaning: Nơi GitHub liệt kê các action công khai để tìm và dùng.
+  see: [action, supply chain]
+
+- term: tag
+  literal: nhãn
+  meaning: Tên trỏ tới một commit, như v7; chủ repo có thể dời tag sang commit khác.
+  example: "uses: actions/checkout@v7"
+  see: [commit SHA, pin]
+
+- term: commit SHA
+  literal: mã băm của commit
+  meaning: Chuỗi 40 ký tự định danh một commit, tính từ nội dung nên không thể bị dời như tag.
+  example: "3d3c42e5aac5ba805825da76410c181273ba90b1"
+  see: [tag, pin, hash]
+
+- term: pin
+  literal: ghim
+  meaning: Ghi action bằng commit SHA đầy đủ thay cho tag, kèm chú thích phiên bản.
+  example: "uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1"
+  see: [commit SHA, Dependabot]
+
+- term: supply chain
+  literal: chuỗi cung ứng
+  meaning: Mọi thứ của người khác mà dự án dùng (action, thư viện). Một mắt xích bị chiếm là dự án bị ảnh hưởng.
+  see: [pin, Marketplace]
+
+- term: Dependabot
+  literal: robot lo phụ thuộc
+  meaning: Robot của GitHub định kỳ kiểm tra action và thư viện, có bản mới thì mở PR cập nhật.
+  example: ".github/dependabot.yml"
+  see: [pin]
+
+# Chương 7
+- term: GITHUB_TOKEN
+  literal: token của GitHub
+  meaning: Token GitHub tự tạo cho mỗi job, chỉ dùng cho repo hiện tại, quyền theo permissions, hết hạn khi job xong.
+  example: "${{ secrets.GITHUB_TOKEN }}"
+  see: [permissions, least privilege, token]
+
+- term: least privilege
+  literal: đặc quyền tối thiểu
+  meaning: Nguyên tắc mỗi job chỉ có đúng quyền cần cho việc của nó, để lỡ bị lợi dụng thì thiệt hại nhỏ nhất.
+  see: [permissions, GITHUB_TOKEN]
+
+- term: gh
+  expansion: GitHub CLI
+  literal: giao diện dòng lệnh của GitHub
+  meaning: Lệnh gh làm việc với GitHub từ terminal; có sẵn trên runner, đọc token từ biến GH_TOKEN.
+  example: "gh pr comment \"$PR_NUMBER\" --body \"Cảm ơn bạn!\""
+
+- term: fork
+  literal: rẽ nhánh
+  meaning: Bản chép một repo sang tài khoản khác; người đó sửa được mọi thứ rồi mở PR về repo gốc.
+  see: [untrusted, pull_request_target]
+
+- term: pull_request_target
+  literal: pull request, phía đích
+  meaning: Event chạy workflow của nhánh chính với secret và token ghi, kể cả cho PR từ fork. Không bao giờ checkout và chạy code của PR trong đó.
+  see: [pwn request, fork]
+
+- term: untrusted
+  literal: không đáng tin
+  meaning: Code hoặc dữ liệu do người ngoài viết, chưa ai review, như code trong PR từ fork, tiêu đề PR, tên nhánh, nội dung comment.
+  see: [script injection, fork]
+
+- term: pwn request
+  literal: pull request chiếm quyền
+  meaning: Tấn công dùng workflow pull_request_target checkout và chạy code của PR, để lấy secret và token ghi.
+  see: [pull_request_target]
+
+- term: script injection
+  literal: tiêm lệnh vào script
+  meaning: Chữ do người ngoài gõ được dán vào run qua biểu thức và thành lệnh thật. Sửa bằng cách đưa qua env.
+  see: [untrusted, payload, expression]
+
+- term: payload
+  literal: phần tải
+  meaning: Đoạn lệnh độc mà kẻ tấn công chở theo, ví dụ lệnh gửi token đi nơi khác.
+  see: [script injection]
+
+# Chương 8
+- term: pipeline
+  literal: đường ống
+  meaning: Chuỗi bước tự động nối nhau từ lúc có thay đổi tới lúc thay đổi đến tay người dùng, như test rồi deploy.
+  see: [CI, CD]

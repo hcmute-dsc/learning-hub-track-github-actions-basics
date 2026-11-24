@@ -1,0 +1,79 @@
+uid: 207f8103-4df5-43be-ab06-029dadaf2c8b
+slug: security-quiz
+title: "Kiểm tra: bảo mật workflow"
+type: quiz
+difficulty: medium
+lesson: script-injection
+estimatedMinutes: 12
+authors: [github:TienNHM]
+spec:
+  passScore: 0.8
+  questions:
+    - id: q1
+      type: single
+      prompt: "Cấp workflow có `permissions: contents: read`. Job `deploy` ghi `permissions: pages: write` (chỉ một dòng). Job đó có những quyền nào?"
+      options:
+        - "contents: read và pages: write"
+        - "Chỉ pages: write; contents là none"
+        - "Mọi quyền"
+      answer: 1
+      explanation: "Danh sách cấp job thay hẳn cấp workflow, không cộng thêm. Cần đọc code thì ghi lại contents: read."
+    - id: q2
+      type: single
+      prompt: "Step `gh pr comment` báo `Resource not accessible by integration (addComment)`. Thiếu gì?"
+      options: ["contents: write", "pull-requests: write", "Một secret mới"]
+      answer: 1
+      explanation: "Viết bình luận lên PR cần scope pull-requests ở mức write."
+    - id: q3
+      type: single
+      prompt: "Một PR từ fork chạy workflow có event `pull_request` và job xin `contents: write`. Job đó push được lên repo của bạn không?"
+      options: ["Được, vì job đã xin quyền", "Không, token của PR từ fork luôn chỉ đọc và không có secret"]
+      answer: 1
+      explanation: "GitHub hạ token xuống chỉ đọc và giữ lại secret với PR từ fork."
+    - id: q4
+      type: single
+      prompt: "Workflow `pull_request_target` checkout `github.event.pull_request.head.sha` rồi chạy `npm test`. Rủi ro là gì?"
+      options:
+        - "Không có rủi ro, vì workflow lấy từ nhánh chính"
+        - "Code của người lạ chạy cùng secret và token có quyền ghi của bạn (pwn request)"
+        - "Test chạy chậm hơn"
+      answer: 1
+      explanation: "pull_request_target có secret và token ghi; chạy code của PR trong đó là trao quyền cho người mở PR."
+    - id: q5
+      type: single
+      prompt: "Trong `run` của một step có dòng `echo \"Nhánh: ${{ github.head_ref }}\"`. Vì sao nguy hiểm?"
+      options:
+        - "Vì head_ref là secret"
+        - "Vì tên nhánh do người mở PR đặt, được dán vào script trước khi bash chạy, nên có thể chứa lệnh"
+        - "Vì echo bị cấm trong workflow"
+      answer: 1
+      explanation: "Đây là script injection. Đưa qua env rồi đọc $BRANCH."
+    - id: q6
+      type: single
+      prompt: "Cách sửa đúng cho câu trên là gì?"
+      options:
+        - "Bọc thêm một lớp nháy đơn quanh ${{ github.head_ref }}"
+        - "Đặt env: BRANCH: ${{ github.head_ref }} rồi run: echo \"Nhánh: $BRANCH\" (viết run nhiều dòng)"
+        - "Đổi sang pull_request_target"
+      answer: 1
+      explanation: "Nháy không cứu được, vì kẻ xấu có thể đóng nháy trong tên nhánh. Biến môi trường thì bash coi là chữ."
+    - id: q7
+      type: multiple
+      prompt: "Giá trị nào do người ngoài (người mở PR, issue, comment) đặt được, nên phải đưa qua env?"
+      options:
+        - "github.event.pull_request.title"
+        - "github.sha"
+        - "github.event.comment.body"
+        - "github.head_ref"
+        - "github.repository"
+      answer: [0, 2, 3]
+      explanation: "Tiêu đề PR, nội dung comment, tên nhánh do người khác gõ; sha và repository do GitHub đặt."
+    - id: q8
+      type: single
+      prompt: "Theo nguyên tắc least privilege, khi không chắc job cần quyền gì, nên làm gì?"
+      options:
+        - "Cho write-all để khỏi lỗi"
+        - "Bắt đầu từ contents: read, chạy thử, thiếu quyền nào thì GitHub báo rõ và thêm đúng quyền đó"
+        - "Không ghi permissions"
+      answer: 1
+      explanation: "Thiếu quyền thì báo lỗi rõ ràng; thừa quyền thì không ai báo cho tới khi bị lợi dụng."

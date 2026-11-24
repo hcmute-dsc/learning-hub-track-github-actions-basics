@@ -1,0 +1,29 @@
+uid: fecae3df-a3af-48d5-98a3-f324661ef6d2
+slug: final-project
+title: "Pipeline CI/CD cho repo của bạn"
+type: project
+difficulty: hard
+lesson: project-guide
+estimatedMinutes: 240
+requiresReview: true
+prerequisites:
+  - github-actions-basics/reuse/reuse-project
+  - github-actions-basics/workflow-security/security-review
+authors: [github:TienNHM]
+spec:
+  deliverable: github_repo_or_pr
+  rubric:
+    - criterion: "CI: chạy trên pull_request và push lên main, kiểm tra thật (test hoặc link) và đỏ khi có lỗi; ruleset bắt buộc PR và required checks khớp tên check"
+      weight: 3
+    - criterion: "Deploy: chỉ từ main, không chạy trên PR, có needs tới CI và environment có luật bảo vệ"
+      weight: 2
+    - criterion: "Tốc độ và kết quả: dùng đúng ít nhất một trong matrix, cache, artifact"
+      weight: 1
+    - criterion: "Tái sử dụng: reusable workflow hoặc composite action, được gọi ở ít nhất hai chỗ hoặc thay được đoạn lặp"
+      weight: 2
+    - criterion: "An toàn: đạt danh sách tự kiểm tra chương 7 (permissions tối thiểu, không pull_request_target, không chèn dữ liệu người ngoài vào run, không in secret, action bên thứ ba ghim SHA, có Dependabot)"
+      weight: 3
+    - criterion: "README: badge, bảng pipeline, đoạn bảo mật và bằng chứng; người lạ đọc là hiểu repo chạy thế nào"
+      weight: 1
+    - criterion: "Quy trình: nộp bằng PR, trả lời nhận xét của mentor trên cùng nhánh"
+      weight: 1

@@ -1,0 +1,11 @@
+uid: 54e985c3-4bd9-4655-b6d4-9599d42219e8
+slug: matrix-cache
+title: "Matrix, cache và artifact"
+summary: "Chạy cùng một job trên nhiều phiên bản Node bằng matrix, tăng tốc cài đặt bằng cache, và chuyển file giữa các job bằng artifact. Hiểu cache key khớp thế nào và khi nào cache bị miss."
+lessons:
+  - 01-matrix
+  - 02-cache
+  - 03-artifacts
+exercises:
+  - matrix-cache-quiz
+  - matrix-cache-practice

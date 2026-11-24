@@ -1,0 +1,33 @@
+# Track (lộ trình). Đặc tả đầy đủ: CONTENT-SPECIFICATION §3.1
+# https://github.com/hcmute-dsc/learning-hub-docs/blob/main/docs/product/CONTENT-SPECIFICATION.md
+
+# Khóa của track trong database. KHÔNG BAO GIỜ đổi (đổi là mất tiến độ học).
+uid: 01a20b90-13dd-7f20-b216-bbb999843176
+slug: github-actions-basics
+title: "GitHub Actions cơ bản"
+summary: "Cho GitHub tự làm việc thay bạn: chạy test trên mỗi pull request, deploy portfolio lên GitHub Pages, giữ secret an toàn, chạy song song bằng matrix, tái sử dụng workflow, và tránh các lỗ hổng bảo mật hay gặp. Dành cho người đã biết Git và GitHub."
+language: vi
+level: beginner
+estimatedHours: 12
+tags: [github-actions, ci-cd, github-pages, devops, security]
+outcomes:
+  - "Giải thích được event, workflow, job, step, runner, và đọc log để sửa một lần chạy bị đỏ"
+  - "Tự động chạy test trên mỗi pull request và deploy trang web tĩnh lên GitHub Pages"
+  - "Dùng biến, secrets và environment đúng chỗ, không để lộ secret ra log"
+  - "Tăng tốc và tái sử dụng workflow bằng matrix, cache, artifact, reusable workflow và composite action"
+  - "Viết workflow an toàn: permissions tối thiểu, ghim action bằng commit SHA, tránh script injection và pull_request_target"
+maintainers: [github:TienNHM]
+license: CC-BY-SA-4.0
+# Thứ tự trên trang danh sách track (nhỏ đứng trước). Ngay sau track actions-docker (300).
+position: 310
+# Chương 1, 2 và một phần chương 7 lấy từ track actions-docker (cùng tác giả), viết lại và mở rộng.
+source: { repo: hcmute-dsc/learning-hub-track-actions-docker, commit: 5fae2266646948785b32bc59b47276809792b75a }
+modules:
+  - 01-actions-basics
+  - 02-deploy-pages
+  - 03-ci-tests
+  - 04-variables-secrets
+  - 05-matrix-cache
+  - 06-reuse
+  - 07-workflow-security
+  - 08-final-project

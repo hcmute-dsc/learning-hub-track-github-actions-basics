@@ -1,0 +1,18 @@
+uid: 7594b4f6-845c-41b4-8625-5370943649f3
+slug: secrets-practice
+title: "Biến, secret và deploy có duyệt"
+type: self_check
+difficulty: easy
+lesson: environments
+estimatedMinutes: 40
+prerequisites:
+  - github-actions-basics/ci-tests/ci-for-pr
+authors: [github:TienNHM]
+spec:
+  checklist:
+    - "env-demo.yml in đúng GREETING, NAME, TARGET ở step đầu, và NAME rỗng ở step thứ hai"
+    - "Đã tạo vars SITE_NAME, đổi giá trị trong Settings và thấy log đổi theo mà không cần commit"
+    - "secret-demo.yml in độ dài secret và thấy *** ở dòng thử in; đã thấy dòng rev lọt qua masking (chỉ với giá trị giả)"
+    - "Đã xóa dòng rev khỏi workflow sau khi thử"
+    - "Environment production có Required reviewers và chỉ cho nhánh main; DEPLOY_TOKEN là environment secret"
+    - "deploy-demo.yml: đã Approve một lần (job deploy chạy) và Reject một lần (job deploy không chạy)"

@@ -1,0 +1,15 @@
+uid: f027d4c4-071f-42ea-9d08-655b137b0b52
+slug: hello-workflow
+title: "Workflow đầu tiên trong repo của bạn"
+type: self_check
+difficulty: easy
+lesson: read-the-log
+estimatedMinutes: 25
+authors: [github:TienNHM]
+spec:
+  checklist:
+    - "Repo có .github/workflows/hello.yml và một lần chạy xanh trong tab Actions"
+    - "Log của step Chào in đúng tên repo và mã commit của bạn"
+    - "Đã cố tình làm một step lỗi, tìm được dòng nguyên nhân (không phải dòng exit code)"
+    - "Đã sửa lỗi, push lại và thấy lần chạy xanh"
+    - "Đã thêm workflow_dispatch và bấm Run workflow chạy bằng tay một lần"
