@@ -2,7 +2,7 @@
 
 Chuẩn này đến từ góp ý của thành viên mới sau **Git & GitHub Study Jam 2026** ([learning-hub-track-template#7](https://github.com/hcmute-dsc/learning-hub-track-template/issues/7)). Người học không than bài khó. Họ than ba điều: học lệnh mà không hiểu chữ, phải hỏi AI mới hiểu bài, và ngại hỏi người dạy.
 
-Mỗi bài học và bài tập trong track phải đạt **6 tiêu chí** dưới đây. Người review kiểm tra theo checklist trong mẫu Pull Request. Bài mẫu áp dụng đủ 6 tiêu chí: [`03-teaching-standard.md`](tracks/example-track/modules/01-getting-started/lessons/03-teaching-standard.md).
+Mỗi bài học và bài tập trong track phải đạt **6 tiêu chí** dưới đây. Người review kiểm tra theo checklist trong mẫu Pull Request. Bài mẫu áp dụng đủ 6 tiêu chí: [`02-ci-workflow.md`](tracks/github-actions-basics/modules/03-ci-tests/lessons/02-ci-workflow.md) (chương 3, "Workflow CI": có từ vựng, phần Đọc hiểu sau mỗi khối lệnh, sơ đồ, Ngoài thực tế, bảng Khi bị lỗi).
 
 | # | Tiêu chí | Một câu để nhớ |
 | --- | --- | --- |
@@ -34,11 +34,11 @@ Mỗi bài có hộp **"Từ mới trong bài"** liệt kê 3–7 từ bài đó
 
 **Khai báo từ vựng** ([learning-hub#106](https://github.com/hcmute-dsc/learning-hub/issues/106)):
 
-1. Ghi mỗi từ một lần trong `tracks/<slug>/glossary.yaml`: `term`, `expansion` (chữ đầy đủ), `literal` (nghĩa đen), `meaning`, `example`, `see`. Mẫu: `tracks/example-track/glossary.yaml`.
+1. Ghi mỗi từ một lần trong `tracks/<slug>/glossary.yaml`: `term`, `expansion` (chữ đầy đủ), `literal` (nghĩa đen), `meaning`, `example`, `see`. Mẫu: [`tracks/github-actions-basics/glossary.yaml`](tracks/github-actions-basics/glossary.yaml).
 2. Trong front matter của bài, liệt kê từ bài đó giới thiệu: `terms: [repository, init, commit]`.
 3. Viết từ đó trong **câu văn** ở lần đầu nó xuất hiện, không chỉ trong khối code.
 
-Site làm phần còn lại: hộp "Từ mới trong bài" thu gọn ở cuối bài để ôn lại, gạch chân chấm và chú thích ở lần đầu từ xuất hiện (chạm vào là thấy nghĩa), và tab **Từ vựng** của track (A–Z, ô tìm, "Học ở bài …"). Validator báo lỗi nếu một từ trong `terms:` không có trong `glossary.yaml`. Mẫu đầy đủ: bài `03-teaching-standard.md`.
+Site làm phần còn lại: hộp "Từ mới trong bài" thu gọn ở cuối bài để ôn lại, gạch chân chấm và chú thích ở lần đầu từ xuất hiện (chạm vào là thấy nghĩa), và tab **Từ vựng** của track (A–Z, ô tìm, "Học ở bài …"). Validator báo lỗi nếu một từ trong `terms:` không có trong `glossary.yaml`. Mẫu đầy đủ: bài [`02-ci-workflow.md`](tracks/github-actions-basics/modules/03-ci-tests/lessons/02-ci-workflow.md).
 
 ## T2. Giải thích trước khi thực hành
 
@@ -82,7 +82,7 @@ Dự án cuối track nên có ít nhất một lần làm theo quy trình nhóm
 
 ## T5. Cài đặt
 
-**Yêu cầu.** `docs/setup.md` có đủ mọi thứ track cần, theo thứ tự làm, cho Windows, macOS và Linux. Lấy hai mục **"Chuẩn bị chung"** và **"Hỏi ở đâu"** từ [`docs/setup.md` mẫu](tracks/example-track/docs/setup.md), rồi thêm phần riêng của track.
+**Yêu cầu.** `docs/setup.md` có đủ mọi thứ track cần, theo thứ tự làm, cho Windows, macOS và Linux. Lấy hai mục **"Chuẩn bị chung"** và **"Hỏi ở đâu"** từ [`docs/setup.md` của track này](tracks/github-actions-basics/docs/setup.md), rồi thêm phần riêng của track.
 
 Những chỗ hay bị quên:
 

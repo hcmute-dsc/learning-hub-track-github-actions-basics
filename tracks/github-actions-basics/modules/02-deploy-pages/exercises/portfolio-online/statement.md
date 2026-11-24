@@ -1,4 +1,4 @@
-Đưa portfolio của bạn lên GitHub Pages bằng workflow ở chương này, có job kiểm tra link chạy trước job deploy. Đánh dấu từng mục khi xong.
+Đưa portfolio của bạn lên GitHub Pages bằng workflow ở chương này, có job kiểm tra link chạy trước job build và deploy. Đánh dấu từng mục khi xong.
 
 Chưa có portfolio? Một file `index.html` có tên bạn, một file `style.css` và một ảnh là đủ cho chương này. Track chấm workflow, không chấm giao diện.
 

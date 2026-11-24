@@ -11,19 +11,19 @@ spec:
   questions:
     - id: q1
       type: single
-      prompt: "Job `deploy` có `needs: check-links`. Nếu `check-links` đỏ thì sao?"
+      prompt: "Chuỗi job là check-links → build → deploy, nối bằng `needs`. Nếu `check-links` đỏ thì job deploy thế nào?"
       options:
         - "deploy vẫn chạy, nhưng chậm hơn"
         - "deploy bị bỏ qua, trang cũ giữ nguyên"
         - "deploy chạy trước rồi mới kiểm tra"
       answer: 1
-      explanation: "`needs` bắt job chờ và chỉ chạy khi job kia thành công."
+      explanation: "`needs` bắt job chờ và chỉ chạy khi job kia thành công; build bị bỏ qua thì deploy (needs: build) cũng bị bỏ qua."
     - id: q2
       type: multiple
-      prompt: "Job deploy lên Pages cần thêm những quyền nào ngoài `contents: read`?"
+      prompt: "Job `deploy` chỉ có một step là `actions/deploy-pages`. Nó cần những quyền nào?"
       options: ["pages: write", "id-token: write", "packages: write", "issues: write"]
       answer: [0, 1]
-      explanation: "`pages: write` để ghi lên Pages, `id-token: write` để Pages xác minh lần deploy đến từ workflow này."
+      explanation: "`pages: write` để ghi lên Pages, `id-token: write` để Pages xác minh lần deploy đến từ workflow này. Job này không checkout nên không cần contents."
     - id: q3
       type: single
       prompt: "Repo `portfolio` của tài khoản `ten-ban` có trang ở `https://ten-ban.github.io/portfolio/`. Link CSS nào chạy đúng?"
@@ -50,7 +50,7 @@ spec:
       explanation: "Link ra ngoài kiểm tra được, nhưng dễ đỏ vì lý do ngoài tầm tay, không nên chặn deploy."
     - id: q6
       type: single
-      prompt: "Trên pull request, job deploy có `if: github.event_name != 'pull_request'`. Nó hiện thế nào trong tab Actions?"
+      prompt: "Trên pull request, job build có `if: github.event_name != 'pull_request'`. Job build hiện thế nào trong tab Actions?"
       options: ["Đỏ", "Xanh", "Xám (skipped, bị bỏ qua)"]
       answer: 2
       explanation: "Điều kiện sai thì job không chạy và hiện là skipped; đó không phải lỗi."

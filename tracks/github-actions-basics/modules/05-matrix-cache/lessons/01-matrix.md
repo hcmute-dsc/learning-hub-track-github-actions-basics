@@ -122,6 +122,8 @@ flowchart LR
 
 Cách sửa: **Settings** → **Rules** → **Rulesets** → `bao-ve-main` → trong **Require status checks to pass**, xóa `test`, thêm `test (22)`, `test (24)`, `test (26)` (chúng hiện trong ô tìm sau khi đã chạy một lần).
 
+Bẫy ngược lại, gặp khi chạy thử thật: nếu repo còn **một workflow khác có job tên `test`** (ví dụ `report.yml` ở bài 3 của chương này), check `test` của workflow đó vẫn xuất hiện, ruleset thấy "đã có check `test` xanh" và PR **không** treo. Trông như không sao, nhưng luật đang kiểm tra nhầm workflow. Vì vậy sửa ruleset theo tên mới ngay khi đổi tên job, đừng đợi PR treo mới sửa.
+
 ## 6. Ngoài thực tế
 
 Thư viện mã nguồn mở thường test trên mọi phiên bản Node còn hỗ trợ và cả ba hệ điều hành, vì người dùng của họ dùng đủ loại máy. Ứng dụng của một công ty thì thường chỉ test đúng phiên bản chạy trên server, cộng phiên bản sắp nâng cấp lên, để biết trước có gì hỏng. Khi một bản Node hết hỗ trợ, nhóm xóa nó khỏi matrix trong cùng PR nâng cấp.

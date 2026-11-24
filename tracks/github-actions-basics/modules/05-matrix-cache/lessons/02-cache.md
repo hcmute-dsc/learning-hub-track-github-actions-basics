@@ -76,7 +76,29 @@ Cái quyết định "thư viện nào được cài" là **lockfile** (chương
 - Nó **không** cache `node_modules/`. `npm ci` vẫn chạy và vẫn xóa `node_modules/`, nhưng lấy file từ `~/.npm` trên máy thay vì tải từ internet.
 - Cần có `package-lock.json` trong repo, nếu không step báo lỗi không tìm thấy file để tính key.
 
-Lần chạy đầu, log của step setup-node có dòng kiểu `npm cache is not found` (miss), và cuối job có step **Post Cài Node.js…** lưu cache. Lần chạy sau (lockfile không đổi), log có `Cache restored from key: node-cache-Linux-x64-npm-…` (hit).
+Log thật của lần chạy thử (mã hash rút gọn):
+
+```text
+# Lần đầu, step "Cài Node.js 24":
+npm cache is not found
+# ...cuối job, step "Post Cài Node.js 24":
+Cache saved with the key: node-cache-Linux-x64-npm-eb8dace7…
+
+# Lần sau, lockfile không đổi, step "Cài Node.js 26":
+Cache hit for: node-cache-Linux-x64-npm-eb8dace7…
+Cache restored successfully
+Cache restored from key: node-cache-Linux-x64-npm-eb8dace7…
+# ...cuối job:
+Cache hit occurred on the primary key node-cache-Linux-x64-npm-eb8dace7…, not saving cache.
+```
+
+**Đọc hiểu**
+
+- `npm cache is not found`: **miss**, chưa có ngăn nào mang key này.
+- `Cache saved with the key: …`: step **Post** (chạy ở cuối job) cất ngăn mới.
+- `Cache restored from key: …`: **hit**, đã lấy đồ ra.
+- `not saving cache`: key đã có ngăn, không ghi đè (mục 1).
+- Key **không** chứa phiên bản Node, nên ba job của matrix dùng **chung một ngăn**. Trong lần chạy thử, job Node 24 xong trước và lưu cache; job 22 và 26 chạy sau một chút đã trúng luôn ngăn đó ngay trong lần chạy đầu. Với `~/.npm` thì không sao, vì thư viện tải về không phụ thuộc phiên bản Node.
 
 Project `diem-trung-binh` chưa có thư viện nào nên cache rất nhỏ và bạn khó thấy nhanh hơn. Với project thật, thời gian `npm ci` có thể giảm từ cả phút xuống vài giây.
 

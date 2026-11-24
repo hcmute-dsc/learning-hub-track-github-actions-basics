@@ -75,7 +75,7 @@ Commit và push. Trong tab **Actions**, lần chạy mới có dấu X đỏ.
 
 1. **Mở lần chạy đỏ**, chọn job có dấu X.
 2. **Tìm step đỏ đầu tiên.** Các step sau nó màu xám, đừng đọc chúng.
-3. **Đọc từ dưới lên** trong step đó. Dòng cuối thường là `Error: Process completed with exit code 2.`; dòng ngay trên mới là **nguyên nhân**:
+3. **Đọc từ dưới lên** trong step đó. Dòng cuối thường là `Error: Process completed with exit code 2.`; dòng ngay trên mới là **nguyên nhân**. Log thật của lần chạy thử:
 
 ```text
 ls: cannot access 'thu-muc-khong-co': No such file or directory
@@ -85,7 +85,7 @@ Error: Process completed with exit code 2.
 **Đọc hiểu**
 
 - Dòng 1 do lệnh `ls` in ra: nó không truy cập được thư mục, vì không có.
-- Dòng 2 do runner in ra: lệnh trả về exit code 2, nên runner đánh dấu step đỏ.
+- Dòng 2 do runner in ra: lệnh trả về exit code 2, nên runner đánh dấu step đỏ. Nếu bạn tải log thô (biểu tượng bánh răng ở góc trên khung log → **View raw logs**), dòng này hiện là `##[error]Process completed with exit code 2.`: `##[error]` là cách runner đánh dấu dòng lỗi, trang web tô đỏ và đổi thành `Error:`.
 - Muốn sửa thì sửa theo dòng 1, không phải dòng 2.
 
 ## 5. Những lỗi hay gặp
@@ -93,7 +93,7 @@ Error: Process completed with exit code 2.
 | Bạn thấy | Nguyên nhân thường gặp |
 | --- | --- |
 | Không có lần chạy nào trong tab Actions | File không nằm đúng `.github/workflows/`, hoặc đuôi không phải `.yml`/`.yaml`, hoặc `on:` không khớp event |
-| `Invalid workflow file` trên trang lần chạy | Lỗi YAML: thụt lề sai, dùng Tab, thiếu dấu `:` |
+| `Invalid workflow file` và `You have an error in your yaml syntax on line N` trên trang lần chạy; lần chạy mang tên đường dẫn file | Lỗi YAML ở dòng N: thụt lề sai, dùng Tab, thiếu dấu `:`, hoặc `: ` trong lệnh `run` một dòng |
 | `No such file or directory` | Quên step `actions/checkout`, hoặc sai đường dẫn (Linux phân biệt hoa thường: `Index.html` khác `index.html`) |
 | `command not found` (exit code 127) | Lệnh không có trên runner, hoặc gõ sai tên |
 | Exit code 1 mà không rõ lý do | Thêm `set -x` ở đầu `run` để in từng lệnh trước khi chạy (đừng làm vậy ở step có secret, chương 4) |

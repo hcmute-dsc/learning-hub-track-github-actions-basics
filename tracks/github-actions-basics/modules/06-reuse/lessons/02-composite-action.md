@@ -98,7 +98,7 @@ jobs:
 - **Checkout phải chạy trước**: action nằm trong repo, mà runner chưa có repo cho tới khi checkout. Đặt `uses: ./...` trước checkout là lỗi `Can't find 'action.yml'`.
 - `with:` truyền input như mọi action.
 
-Log của step **Cài project** có thể mở ra để xem từng step bên trong.
+Log của step **Cài project** có thể mở ra để xem từng step bên trong (lần chạy thử thấy đủ hai step `Cài Node.js` và `Cài thư viện` của action, kèm dòng `Cache restored from key: …` của setup-node). Bên ngoài, danh sách step của job chỉ có: Set up job, checkout, **Cài project**, npm test, rồi các step Post và Complete job.
 
 ## 4. Chọn reusable workflow hay composite action
 

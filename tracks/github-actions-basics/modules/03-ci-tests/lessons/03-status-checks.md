@@ -68,7 +68,8 @@ Làm trong repo `diem-trung-binh` (cần quyền admin, repo của bạn thì b�
 
 - Check chỉ hiện trong ô tìm khi nó đã chạy ít nhất một lần gần đây. Vì thế phải làm bài trước xong rồi mới bật ruleset.
 - Tên check là tên **job** (`test`), không phải tên file (`ci.yml`) hay tên workflow (`CI`). Đổi tên job sau này thì phải sửa ruleset.
-- Bạn là admin nên vẫn có thể thấy tuỳ chọn vượt luật (*bypass*). Đừng dùng: luật có ý nghĩa khi áp cho mọi người.
+- Mục **Bypass list** (*danh sách được vượt luật*) để trống: kể cả bạn, chủ repo, cũng phải theo luật (lần chạy thử xác nhận: push thẳng của chủ repo cũng bị từ chối). Đừng tự thêm mình vào đó: luật có ý nghĩa khi áp cho mọi người.
+- Tên check là tên job ở **bất kỳ** workflow nào. Nếu hai workflow cùng có job tên `test`, check nào xanh cũng làm luật hài lòng. Đặt tên job khác nhau để luật kiểm tra đúng thứ bạn muốn (chương 5 có ví dụ).
 
 ## 4. Thử lại
 
@@ -86,7 +87,16 @@ git push
 
 - `git switch main`: về nhánh `main`.
 - `--allow-empty`: cho phép commit không có thay đổi, chỉ để thử.
-- `git push` bị từ chối với thông báo có `GH013: Repository rule violations found` và `Changes must be made through a pull request`. Ruleset đang hoạt động.
+- `git push` bị từ chối. Thông báo thật khi chạy thử:
+
+  ```text
+  remote: error: GH013: Repository rule violations found for refs/heads/main.
+  remote: - Changes must be made through a pull request.
+  remote: - Required status check "test" is expected.
+   ! [remote rejected] main -> main (push declined due to repository rule violations)
+  ```
+
+  Mỗi dòng `-` là một luật bị vi phạm: chưa qua PR, và chưa có check `test` xanh. Ruleset đang hoạt động.
 - Dọn dẹp commit thử: `git reset --hard origin/main` đưa `main` trên máy về đúng bản trên GitHub (xóa commit rỗng vừa tạo).
 
 ## 5. Badge trên README

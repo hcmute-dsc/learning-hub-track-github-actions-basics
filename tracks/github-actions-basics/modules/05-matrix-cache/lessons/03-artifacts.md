@@ -94,6 +94,7 @@ jobs:
   - `| tee test-report.txt`: `tee` (đặt theo ống nước chữ T) vừa in ra log, vừa ghi vào file.
   - Có ống `|` thì exit code của cả dòng là của lệnh **cuối** (`tee`, gần như luôn thành công). Test trượt mà step vẫn xanh: đúng cái bẫy CI phải tránh.
 - `shell: bash`: chọn shell cho step. Không ghi `shell`, runner Linux chạy `bash -e` (dừng khi có lệnh lỗi) nhưng **không** bật **pipefail** (*ống hỏng thì báo hỏng*). Ghi rõ `shell: bash` thì GitHub chạy `bash --noprofile --norc -eo pipefail`: lệnh nào trong ống đỏ thì cả dòng đỏ. Nhờ dòng này, test trượt vẫn làm step đỏ. Thiếu nó, step luôn xanh dù test trượt.
+  Bạn kiểm tra được trong log: mở step, dòng `shell:` ngay dưới lệnh cho biết runner chạy kiểu gì. Không ghi `shell` thì thấy `shell: /usr/bin/bash -e {0}`; ghi `shell: bash` thì thấy `shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}`.
 - `if: always()`: hàm **always** (*luôn luôn*): chạy step này **kể cả khi step trước đỏ**. Bình thường step sau bị bỏ qua khi có step đỏ (chương 1). Báo cáo test hữu ích nhất đúng lúc test đỏ, nên phải upload cả khi đỏ.
 - `actions/upload-artifact@v7` với:
   - `name: test-report`: nhãn của bưu kiện, job khác dùng tên này để lấy;

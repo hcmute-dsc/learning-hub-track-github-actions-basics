@@ -120,6 +120,8 @@ updates:
 - `interval: weekly`: kiểm tra mỗi tuần.
 - File này không phải workflow, không nằm trong `workflows/`.
 
+Sau khi file vào `main`, Dependabot tự chạy. Trong tab **Actions** xuất hiện mục **Dependabot Updates**; lần chạy thử thật có tên `github_actions in /., /.github/actions/*` (đúng hai thư mục đã khai báo) và `npm_and_yarn in /.`. Log ghi từng action được kiểm tra, ví dụ `Checking if actions/upload-artifact 7 needs updating` rồi `No update needed for actions/upload-artifact 7`. Mọi thứ đã mới nhất thì không có PR nào: đó là kết quả tốt, không phải lỗi.
+
 ## 6. Sai lầm thường gặp
 
 | Nghĩ sai | Thật ra |
@@ -138,7 +140,7 @@ Sau vụ `tj-actions` năm 2025, nhiều công ty bắt buộc ghim SHA cho mọ
 | Lỗi | Vì sao | Cách sửa |
 | --- | --- | --- |
 | `Unable to resolve action ..., unable to find version ...` | SHA gõ sai, thiếu ký tự, hoặc không thuộc repo đó | Chạy lại `git ls-remote`, chép đủ 40 ký tự |
-| Dependabot không mở PR nào | File sai chỗ/sai tên, hoặc mọi thứ đã mới nhất | File phải là `.github/dependabot.yml`; xem tab **Insights** → **Dependency graph** → **Dependabot** |
+| Dependabot không mở PR nào | File sai chỗ/sai tên, hoặc mọi thứ đã mới nhất | File phải là `.github/dependabot.yml`; xem tab **Actions** → **Dependabot Updates**: log có `No update needed` là mọi thứ đã mới nhất |
 | Lỗi khác, hoặc chưa hiểu vì sao | | Nhắn mentor của track, công khai hay **nhắn riêng** đều được (tab **Cài đặt** → "Hỏi ở đâu") |
 
 ## Tóm tắt

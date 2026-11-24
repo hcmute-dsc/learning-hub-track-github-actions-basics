@@ -64,6 +64,21 @@ echo "Tiêu đề PR: Sửa lỗi"; echo "ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ
 - `;` kết thúc lệnh `echo` thứ nhất. Mọi thứ sau đó là **lệnh mới** do người lạ viết.
 - Log in hai dòng: `Tiêu đề PR: Sửa lỗi` và `ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ`.
 
+Đây là log thật khi chạy thử, với đúng tiêu đề PR ở trên (lệnh chen vào chỉ là `echo`, vô hại):
+
+```text
+Run echo "Tiêu đề PR: Sửa lỗi"; echo "ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ"
+  echo "Tiêu đề PR: Sửa lỗi"; echo "ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ"
+  shell: /usr/bin/bash -e {0}
+Tiêu đề PR: Sửa lỗi
+ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ
+```
+
+**Đọc hiểu**
+
+- Dòng `Run ...` là script runner nhận được, **sau khi** GitHub đã dán tiêu đề vào. Nhìn là thấy hai lệnh nối nhau bằng `;`.
+- Hai dòng cuối là output của hai lệnh `echo`: lệnh thứ hai do người mở PR viết, không phải bạn.
+
 Ở đây lệnh chen vào chỉ là `echo`. Kẻ xấu sẽ thay nó bằng lệnh gửi token đi, gọi là **payload** (*phần tải*: đoạn lệnh độc được chở theo). Kiểu tấn công này gọi là **script injection** (*tiêm lệnh vào script*).
 
 ![Script injection: tiêu đề PR do người lạ gõ đi vào ô biểu thức trong dòng run; GitHub dán chữ vào script; dấu nháy và dấu chấm phẩy trong tiêu đề cắt script làm hai, phần sau thành lệnh thật chạy trên runner. Bên phải: cách an toàn, tiêu đề đi qua biến môi trường nên bash chỉ coi nó là chữ.](../../../assets/script-injection.png)
@@ -94,7 +109,7 @@ Với event `pull_request` từ fork, token chỉ đọc và không có secret (
 
 - GitHub đặt tiêu đề vào **biến môi trường** `PR_TITLE`. Bước này không dán gì vào script.
 - Script runner nhận là `echo "Tiêu đề PR: $PR_TITLE"`, **cố định**, không phụ thuộc tiêu đề.
-- Bash thay `$PR_TITLE` **lúc chạy**, và coi giá trị là **chữ**, không phải lệnh. Log in nguyên văn: `Tiêu đề PR: Sửa lỗi"; echo "ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ`.
+- Bash thay `$PR_TITLE` **lúc chạy**, và coi giá trị là **chữ**, không phải lệnh. Log thật khi chạy thử: dòng `Run` chỉ có `echo "Tiêu đề PR: $PR_TITLE"`, và output in nguyên văn một dòng `Tiêu đề PR: Sửa lỗi"; echo "ĐÃ CHẠY LỆNH CỦA NGƯỜI LẠ`.
 
 Đây chính là quy tắc bạn đã dùng từ chương 4: **trong `run`, đọc biến bằng `$TEN`**, không dán `${{ }}` vào. Giờ bạn biết vì sao.
 

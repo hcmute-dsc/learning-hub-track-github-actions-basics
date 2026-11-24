@@ -11,7 +11,7 @@ tracks/github-actions-basics/        # đúng MỘT thư mục, tên = slug củ
   docs/resources.md          # tuỳ chọn: trang "Tài liệu thêm"
   glossary.yaml              # tuỳ chọn: trang "Từ vựng" (chữ tiếng Anh, chữ đầy đủ, nghĩa đen)
   assets/                    # ảnh (≤ 500 KB/ảnh)
-  modules/01-getting-started/
+  modules/01-actions-basics/
     module.yaml              # danh sách bài học và bài tập của chương
     lessons/*.md             # bài học: thông tin ở đầu file + Markdown
     exercises/<slug>/
@@ -36,7 +36,7 @@ Hướng dẫn đầy đủ, kể cả phần của Ban chủ nhiệm và các l
    ```
 
    Lệnh này đổi tên thư mục, slug, tên track, người phụ trách và sinh `uid` mới cho mọi bài.
-4. Đọc [TEACHING.md](TEACHING.md). Sửa `track.yaml`, viết bài học và bài tập theo các file mẫu (bài `03-teaching-standard` là ví dụ đạt chuẩn). Xóa những bài mẫu không dùng (nhớ xóa cả tên trong `module.yaml`).
+4. Đọc [TEACHING.md](TEACHING.md). Sửa `track.yaml`, viết bài học và bài tập theo các file mẫu (trong track này, bài [`02-ci-workflow.md`](tracks/github-actions-basics/modules/03-ci-tests/lessons/02-ci-workflow.md) là ví dụ đạt chuẩn). Xóa những bài mẫu không dùng (nhớ xóa cả tên trong `module.yaml`).
 5. Kiểm tra trên máy, rồi mở Pull Request theo [CONTRIBUTING.md](CONTRIBUTING.md). CI `validate` phải xanh.
 6. **Đưa lên site:** mở PR vào `learning-hub-content`, đổi `commit` của track trong `tracks.yaml` sang commit mới nhất trên `main` của repo này. Ban chủ nhiệm duyệt PR đó rồi publish.
 
