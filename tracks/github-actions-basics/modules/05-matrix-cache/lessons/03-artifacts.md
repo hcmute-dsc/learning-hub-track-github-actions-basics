@@ -63,6 +63,7 @@ jobs:
       - run: npm ci
 
       - name: Chạy test, lưu kết quả ra file
+        shell: bash
         run: npm test 2>&1 | tee test-report.txt
 
       - name: Upload báo cáo test
@@ -91,7 +92,8 @@ jobs:
 - `npm test 2>&1 | tee test-report.txt`:
   - `2>&1`: gộp luồng báo lỗi (2) vào luồng output thường (1), để file có cả thông báo lỗi.
   - `| tee test-report.txt`: `tee` (đặt theo ống nước chữ T) vừa in ra log, vừa ghi vào file.
-  - Có ống `|` thì exit code của cả dòng thường là của lệnh **cuối** (`tee`, luôn thành công). Nhưng GitHub chạy bash với tùy chọn **pipefail** (*ống hỏng thì báo hỏng*): lệnh nào trong ống đỏ thì cả dòng đỏ. Nhờ vậy test trượt vẫn làm step đỏ.
+  - Có ống `|` thì exit code của cả dòng là của lệnh **cuối** (`tee`, gần như luôn thành công). Test trượt mà step vẫn xanh: đúng cái bẫy CI phải tránh.
+- `shell: bash`: chọn shell cho step. Không ghi `shell`, runner Linux chạy `bash -e` (dừng khi có lệnh lỗi) nhưng **không** bật **pipefail** (*ống hỏng thì báo hỏng*). Ghi rõ `shell: bash` thì GitHub chạy `bash --noprofile --norc -eo pipefail`: lệnh nào trong ống đỏ thì cả dòng đỏ. Nhờ dòng này, test trượt vẫn làm step đỏ. Thiếu nó, step luôn xanh dù test trượt.
 - `if: always()`: hàm **always** (*luôn luôn*): chạy step này **kể cả khi step trước đỏ**. Bình thường step sau bị bỏ qua khi có step đỏ (chương 1). Báo cáo test hữu ích nhất đúng lúc test đỏ, nên phải upload cả khi đỏ.
 - `actions/upload-artifact@v7` với:
   - `name: test-report`: nhãn của bưu kiện, job khác dùng tên này để lấy;

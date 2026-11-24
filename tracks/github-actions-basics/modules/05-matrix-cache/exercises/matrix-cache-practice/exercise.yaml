@@ -13,5 +13,6 @@ spec:
     - "ci.yml chạy matrix Node 22, 24, 26 với fail-fast: false; PR có 3 check"
     - "Ruleset đã đổi: bắt buộc test (22), test (24), test (26) thay cho test"
     - "setup-node có cache: npm; lần chạy thứ hai có dòng Cache restored from key trong log"
+    - "Step test dùng tee có shell: bash, nên khi test trượt step vẫn đỏ"
     - "Mỗi job của matrix upload báo cáo test thành artifact có tên riêng, kể cả khi test đỏ"
     - "Đã cố tình làm test đỏ trên một PR, tải được artifact báo cáo từ trang lần chạy và tìm thấy dòng actual/expected trong đó"

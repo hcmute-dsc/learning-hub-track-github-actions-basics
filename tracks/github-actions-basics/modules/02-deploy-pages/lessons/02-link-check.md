@@ -100,7 +100,7 @@ jobs:
 
 - `pull_request` trong `on`: mở PR là có kiểm tra link, để bạn sửa **trước** khi merge.
 - Job `check-links` có hai step: lấy code, rồi chạy lychee.
-  - `lycheeverse/lychee-action@v2.9.0`: action này không có tag `v2` gọn như `actions/checkout`, nên ghi đủ phiên bản.
+  - `lycheeverse/lychee-action@v2.9.0`: ghi đủ `v2.9.0` để biết chính xác bản đang chạy (tag `v2` cũng có, trỏ tới bản `v2.x` mới nhất).
   - `args`: tham số truyền cho lychee. `--offline` chỉ kiểm tra link trong repo; `--no-progress` tắt thanh tiến trình cho log gọn; `'**/*.html'` là mọi file `.html` ở mọi thư mục (`**` = mọi thư mục con). Giữ dấu nháy đơn để lychee tự tìm file.
   - `fail: true`: có link hỏng thì step đỏ (exit code khác 0).
 - `needs: check-links`: job `deploy` chờ `check-links` xong và **chỉ chạy khi nó xanh**.

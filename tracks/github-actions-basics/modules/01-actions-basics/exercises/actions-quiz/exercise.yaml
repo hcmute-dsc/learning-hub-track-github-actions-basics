@@ -66,6 +66,6 @@ spec:
       explanation: "`push` chỉ tính nhánh `main`; `workflow_dispatch` thêm nút chạy bằng tay; workflow không có `pull_request`."
     - id: q8
       type: short_text
-      prompt: "Repo `an/portfolio`. Step `run: echo ${{ github.repository }}` in ra chữ gì?"
-      answer: ["an/portfolio"]
+      prompt: "Repo `ten-ban/portfolio`. Step `run: echo ${{ github.repository }}` in ra chữ gì?"
+      answer: ["ten-ban/portfolio"]
       explanation: "`github.repository` là tên repo dạng `chủ/tên`, được thay vào trước khi lệnh chạy."

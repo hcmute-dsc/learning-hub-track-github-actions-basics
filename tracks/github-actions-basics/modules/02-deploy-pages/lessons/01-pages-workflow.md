@@ -105,7 +105,7 @@ jobs:
 - `id: deployment`: đặt tên cho step để chỗ khác nhắc tới nó. `${{ steps.deployment.outputs.page_url }}` đọc **output** (*đầu ra*) `page_url` của step đó.
 - `uses: actions/deploy-pages@v5`: bảo GitHub Pages lấy artifact vừa upload và đưa lên mạng.
 
-Portfolio nằm trong thư mục con, ví dụ `site/`? Đổi `path: site`. Thư mục đó phải có `index.html`.
+Với `path: .`, **mọi** file không bắt đầu bằng dấu chấm đều lên mạng, kể cả `README.md`, `package.json` hay file nháp. Ai cũng mở được, ví dụ `https://<tên>.github.io/portfolio/README.md`. Với portfolio chỉ có HTML/CSS thì không sao. Repo có thêm thứ khác thì để trang web trong thư mục con, ví dụ `site/`, rồi đổi `path: site`. Thư mục đó phải có `index.html`.
 
 ## 5. Chạy
 

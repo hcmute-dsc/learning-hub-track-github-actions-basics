@@ -28,6 +28,7 @@ Với `${{ github.sha }}`, giá trị do GitHub tạo, không ai chọn được
 Một workflow chào PR, trông vô hại:
 
 ```yaml
+# SAI: dễ bị script injection, đừng chép
 name: Chào PR
 
 on: pull_request
@@ -118,12 +119,12 @@ docker run --rm -v "$(pwd):/repo" -w /repo rhysd/actionlint:1.7.12 -color
 ```
 
 ```text
-.github/workflows/greet.yml:13:40: "github.event.pull_request.title" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details [expression]
+.github/workflows/greet.yml:14:40: "github.event.pull_request.title" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details [expression]
 ```
 
 **Đọc hiểu**
 
-- `greet.yml:13:40`: file, dòng, cột nơi phát hiện.
+- `greet.yml:14:40`: file, dòng, cột nơi phát hiện (dòng 14 là dòng `run: |` chứa đoạn script).
 - `is potentially untrusted`: giá trị **có thể** do người ngoài đặt.
 - `pass it through an environment variable`: đúng cách sửa ở mục 3.
 - Không có Docker: extension GitHub Actions của VS Code không bắt lỗi này; hãy tự dò theo bảng ở mục 4, hoặc nhờ mentor chạy giúp.

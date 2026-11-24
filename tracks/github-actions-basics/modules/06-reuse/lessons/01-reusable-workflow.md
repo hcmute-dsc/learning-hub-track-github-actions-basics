@@ -120,29 +120,52 @@ Mở PR: check bây giờ có tên dạng `CI / test (22) / run-tests (pull_requ
 
 ## 4. Secret không tự đi theo
 
-Workflow được gọi **không tự thấy** secret của caller. Phải truyền rõ ràng, như truyền tham số:
+Workflow được gọi **không tự thấy** secret của caller. Phải truyền rõ ràng, như truyền tham số. Ví dụ một secret **của repo** tên `NOTIFY_TOKEN` (token gửi thông báo, tạo ở **Repository secrets** như chương 4):
 
 ```yaml
-# Trong workflow được gọi
+# Trong workflow được gọi (notify.yml)
 on:
   workflow_call:
     secrets:
-      DEPLOY_TOKEN:
+      NOTIFY_TOKEN:
         required: true
 
 # Trong caller
 jobs:
-  deploy:
-    uses: ./.github/workflows/deploy.yml
+  notify:
+    uses: ./.github/workflows/notify.yml
     secrets:
-      DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      NOTIFY_TOKEN: ${{ secrets.NOTIFY_TOKEN }}
 ```
 
 **Đọc hiểu**
 
-- Bên được gọi khai báo nó cần secret `DEPLOY_TOKEN` (giống khai báo tham số).
-- Bên gọi truyền `secrets.DEPLOY_TOKEN` của mình vào.
+- Bên được gọi khai báo nó cần secret `NOTIFY_TOKEN` (giống khai báo tham số).
+- Bên gọi truyền `secrets.NOTIFY_TOKEN` của mình vào.
 - Có cách tắt `secrets: inherit` (*thừa kế*: đưa **mọi** secret của caller sang). Tiện nhưng đưa nhiều hơn cần; track này truyền từng secret để luôn biết secret nào đi đâu (chương 7).
+
+**Còn secret của environment** (như `DEPLOY_TOKEN` của `production` ở chương 4) thì **không** truyền theo cách này được: job gọi workflow không có khóa `environment`, nên không mở được "phòng" `production`. Cách đúng là để **job bên trong** workflow được gọi tự ghi `environment: production`; job đó phải qua luật bảo vệ (người duyệt, luật nhánh) rồi mới đọc được `secrets.DEPLOY_TOKEN`, y như chương 4:
+
+```yaml
+# deploy.yml, workflow được gọi
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          echo "Có token deploy: ${#DEPLOY_TOKEN} ký tự"
+```
+
+**Đọc hiểu**
+
+- `environment: production` nằm ở job **bên trong** `deploy.yml`, không nằm ở caller.
+- `secrets.DEPLOY_TOKEN` ở đây là secret của environment, chỉ tới runner sau khi được duyệt. Caller chỉ cần `uses: ./.github/workflows/deploy.yml`, không truyền secret nào.
 
 ## 5. Gọi workflow từ repo khác
 
@@ -151,7 +174,7 @@ Workflow được gọi có thể nằm ở repo khác, ví dụ một repo chun
 ```yaml
 jobs:
   test:
-    uses: an/shared-workflows/.github/workflows/node-test.yml@v1
+    uses: ten-ban/shared-workflows/.github/workflows/node-test.yml@v1
     with:
       node-version: "24"
 ```

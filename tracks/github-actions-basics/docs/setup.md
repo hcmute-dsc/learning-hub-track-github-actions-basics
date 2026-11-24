@@ -19,7 +19,7 @@ git config --global user.email "email-github-cua-ban@example.com"
 
 **Tài khoản GitHub** ([đăng ký](https://github.com/signup)), và tham gia **Discord của HCMUTE DSC** để hỏi bài. Track này cần bạn đã biết commit, push, tạo nhánh và mở pull request (track Git/GitHub của CLB).
 
-**Repo public.** Mọi bài thực hành dùng repo **public** trên tài khoản của bạn: GitHub Actions chạy miễn phí không giới hạn phút, và các tính năng ở chương 3–4 (ruleset, required reviewers) chỉ miễn phí với repo public. Vì repo public ai cũng đọc được, **không bao giờ** để token, mật khẩu hay thông tin cá nhân trong repo; chương 4 dạy chỗ cất đúng.
+**Repo public.** Mọi bài thực hành dùng repo **public** trên tài khoản của bạn: GitHub Actions chạy miễn phí không giới hạn phút, và các tính năng ở chương 3–4 chỉ dùng được với tài khoản miễn phí khi repo là public (ruleset được áp dụng; required reviewers của environment với repo private còn cần gói GitHub Enterprise). Vì repo public ai cũng đọc được, **không bao giờ** để token, mật khẩu hay thông tin cá nhân trong repo; chương 4 dạy chỗ cất đúng.
 
 **Mấy lệnh khác nhau trên Windows** (gặp trong bài thì quay lại đây):
 
@@ -47,7 +47,7 @@ Extension tô màu file workflow, gợi ý khóa, và gạch đỏ chỗ sai cú
 Cài bản **LTS** (số chẵn, 22 trở lên). `npm` đi kèm Node.js.
 
 - **Windows**: tải bản LTS ở [nodejs.org](https://nodejs.org/), chạy file `.msi`, giữ lựa chọn mặc định. Hoặc trong PowerShell: `winget install OpenJS.NodeJS.LTS`.
-- **macOS**: tải bản LTS ở [nodejs.org](https://nodejs.org/) (file `.pkg`), hoặc `brew install node@24` nếu đã có Homebrew.
+- **macOS**: tải bản LTS ở [nodejs.org](https://nodejs.org/) (file `.pkg`), giữ lựa chọn mặc định. Dùng Homebrew thì `brew install node@24` **chưa đủ**: bản có số phiên bản được cài "keg-only", tức không tự thêm vào `PATH`, nên gõ `node` vẫn báo không có. Chạy thêm `brew link --overwrite node@24`, hoặc dùng [nvm](https://github.com/nvm-sh/nvm) như Ubuntu.
 - **Ubuntu**: gói `nodejs` của `apt` thường quá cũ. Dùng [nvm](https://github.com/nvm-sh/nvm) theo hướng dẫn trên trang đó, rồi `nvm install --lts`.
 
 Cài xong, **đóng terminal và mở lại** để terminal thấy lệnh mới.
@@ -94,4 +94,4 @@ Thấy đủ là xong. Chưa tới chương 3 thì chưa cần Node.js.
 
 Mọi người trong CLB theo [Quy tắc ứng xử](https://github.com/hcmute-dsc/.github/blob/master/CODE_OF_CONDUCT.md): không ai được chê câu hỏi của bạn, và câu hỏi riêng được giữ kín. Bị đối xử không đúng thì nhắn riêng Ban chủ nhiệm trên Discord.
 
-Khi hỏi, gửi kèm: bạn đang ở bài nào, **link lần chạy** trong tab Actions (hoặc lệnh đã chạy), và ảnh chụp lỗi. Nếu lỗi có token, mật khẩu hay webhook URL thì **che phần đó** trước khi gửi (chương 4, bài "Secrets", mục "Hỏi bài mà không lộ secret"). Link lần chạy thì an toàn để gửi: GitHub đã che secret thành `***` trong log.
+Khi hỏi, gửi kèm: bạn đang ở bài nào, **link lần chạy** trong tab Actions (hoặc lệnh đã chạy), và ảnh chụp lỗi. Nếu lỗi có token, mật khẩu hay webhook URL thì **che phần đó** trước khi gửi (chương 4, bài "Secrets", mục "Hỏi bài mà không lộ secret"). Link lần chạy thường an toàn để gửi: GitHub đã che secret thành `***` trong log, **miễn là** workflow không in secret đã bị biến đổi (đảo ngược, base64… xem chương 4). Thấy log có chuỗi lạ giống token thì đừng gửi link, hỏi riêng mentor.

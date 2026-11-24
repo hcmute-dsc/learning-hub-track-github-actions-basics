@@ -39,8 +39,8 @@ flowchart LR
   CI --> RC{"required checks xanh?"}
   RC -->|"có"| M["merge vào main"]
   RC -->|"không"| F["sửa, push lại"] --> CI
-  M --> CI2["CI trên main"]
-  CI2 --> D["deploy: environment có luật bảo vệ"]
+  M --> CI2["deploy.yml: job test (gọi node-test.yml)"]
+  CI2 -->|"needs: test"| D["job deploy: environment có luật bảo vệ"]
   DB["Dependabot mỗi tuần"] --> PR
 ```
 
@@ -68,7 +68,7 @@ diem-trung-binh/
 │   ├── workflows/
 │   │   ├── ci.yml              # chương 3, 5: gọi node-test.yml trong matrix
 │   │   ├── node-test.yml       # chương 6: reusable workflow
-│   │   └── deploy.yml          # chương 2, 4: deploy có environment
+│   │   └── deploy.yml          # chương 2, 4, 6: job test (gọi node-test.yml) rồi job deploy
 │   └── dependabot.yml          # chương 6
 ├── src/  test/                 # chương 3
 ├── package.json  package-lock.json
@@ -79,6 +79,7 @@ diem-trung-binh/
 **Đọc hiểu**
 
 - Mỗi file một việc, và mỗi file ghi chương học nó. Khi bạn đọc lại sau vài tháng, hoặc người khác nhận repo, họ biết tìm gì ở đâu.
+- `needs` chỉ nối được các job **trong cùng một file** workflow. Vì vậy `deploy.yml` tự có job `test` (gọi `node-test.yml`, như bài tập chương 6) và job `deploy` có `needs: test`; nó không "chờ" được `ci.yml`. Nhờ reusable workflow, phần test không bị chép lại. Cách khác: đặt job `deploy` ngay trong `ci.yml`, có `needs: test` và `if: github.event_name == 'push'` để không deploy từ PR.
 - Các workflow thử nghiệm (`env-demo.yml`, `secret-demo.yml`…) nên **xóa** trước khi nộp: repo sạch dễ review hơn.
 
 ## 4. README
@@ -95,7 +96,7 @@ README là trang đầu tiên mentor đọc. Cần có:
    | Workflow | Chạy khi | Làm gì |
    | --- | --- | --- |
    | `ci.yml` | pull request, push lên main | test trên Node 22, 24, 26 (có cache) |
-   | `deploy.yml` | push lên main | chờ duyệt ở environment production, rồi deploy |
+   | `deploy.yml` | push lên main | test lại (gọi `node-test.yml`), chờ duyệt ở environment production, rồi deploy |
    ```
 
 4. **Bảo mật**: một đoạn ngắn nói repo đã làm gì theo danh sách tự kiểm tra của chương 7.

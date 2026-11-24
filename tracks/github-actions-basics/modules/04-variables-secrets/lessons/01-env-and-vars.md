@@ -29,8 +29,8 @@ echo $HOME
 
 **Đọc hiểu**
 
-- `$HOME`: bash thay `$HOME` bằng giá trị của biến `HOME` rồi mới chạy `echo`. Bạn thấy kiểu `/home/an` hoặc `/Users/an`.
-- Trong PowerShell, cú pháp khác: `echo $env:HOME` (hoặc `$env:USERPROFILE` trên Windows).
+- `$HOME`: bash thay `$HOME` bằng giá trị của biến `HOME` rồi mới chạy `echo`. Bạn thấy kiểu `/home/ten-ban` hoặc `/Users/ten-ban`.
+- Trong PowerShell trên Windows, biến môi trường đọc bằng `$env:TÊN`: chạy `echo $env:USERPROFILE`. Windows thường không có biến `HOME`, nên `$env:HOME` hay ra rỗng. PowerShell còn có biến riêng `$HOME`, cũng in thư mục nhà, ví dụ `C:\Users\ten-ban`.
 
 Trên runner, GitHub đặt sẵn nhiều biến, tên bắt đầu bằng `GITHUB_` hoặc `RUNNER_`: `GITHUB_SHA` (mã commit), `GITHUB_REPOSITORY` (tên repo), `RUNNER_OS` (`Linux`, `Windows`, `macOS`).
 
@@ -127,10 +127,12 @@ Bấm **Run workflow**, xem log. Rồi sửa giá trị trong Settings, chạy l
 | | `env` trong YAML | `vars` | `secrets` (bài sau) |
 | --- | --- | --- | --- |
 | Nằm ở | File workflow, trong Git | Settings của repo | Settings, **mã hóa** |
-| Ai đọc được giá trị | Ai đọc được repo | Người có quyền vào Settings, và log | Không ai đọc lại được, kể cả bạn |
+| Ai đọc được giá trị | Ai đọc được repo | Người có quyền vào Settings, và **ai đọc được log** (repo public: mọi người) | Không ai đọc lại được, kể cả bạn |
 | Hiện trong log | Có | Có | Bị che thành `***` |
 | Đổi giá trị | Commit | Sửa trong Settings | Sửa trong Settings |
 | Ví dụ | `NODE_VERSION: 24` | Tên site, URL trang staging | Token, mật khẩu, webhook URL |
+
+Với repo **public**, ai cũng đọc được log, nên giá trị `vars` in ra log coi như công khai.
 
 Câu hỏi để chọn: "**Lộ giá trị này ra có sao không?**" Có sao → `secrets`. Không sao, nhưng muốn đổi không cần commit → `vars`. Còn lại → `env`.
 

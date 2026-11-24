@@ -26,7 +26,7 @@ spec:
       explanation: "`pages: write` để ghi lên Pages, `id-token: write` để Pages xác minh lần deploy đến từ workflow này."
     - id: q3
       type: single
-      prompt: "Repo `portfolio` của tài khoản `an` có trang ở `https://an.github.io/portfolio/`. Link CSS nào chạy đúng?"
+      prompt: "Repo `portfolio` của tài khoản `ten-ban` có trang ở `https://ten-ban.github.io/portfolio/`. Link CSS nào chạy đúng?"
       options: ["/style.css", "style.css", "C:/portfolio/style.css"]
       answer: 1
       explanation: "Link tương đối tính từ trang hiện tại, nên vẫn đúng khi trang nằm trong thư mục con `/portfolio/`."

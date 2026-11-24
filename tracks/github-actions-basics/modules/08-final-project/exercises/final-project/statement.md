@@ -4,7 +4,7 @@ Dựng pipeline CI/CD hoàn chỉnh cho **một repo public của bạn**, theo 
 
 - **CI** chạy trên `pull_request` và `push` lên `main`, làm một việc kiểm tra thật (test, hoặc kiểm tra link) và đỏ khi có lỗi.
 - **Ruleset** cho `main`: bắt buộc PR, bắt buộc các check của CI.
-- **Deploy** chỉ từ `main`, có `needs` tới CI, qua một `environment` có luật bảo vệ. Pages: environment `github-pages`. Không có chỗ deploy thật: deploy giả lập bằng `echo` như chương 4, environment `production` có Required reviewers.
+- **Deploy** chỉ từ `main`, có `needs` tới một job test **trong cùng file workflow** (`needs` không nối được sang file khác: cho `deploy.yml` tự có job test gọi reusable workflow, hoặc đặt job deploy trong `ci.yml` với `if: github.event_name == 'push'`), qua một `environment` có luật bảo vệ. Pages: environment `github-pages`. Không có chỗ deploy thật: deploy giả lập bằng `echo` như chương 4, environment `production` có Required reviewers.
 - **Ít nhất một** trong: matrix, cache, artifact.
 - **Ít nhất một** trong: reusable workflow, composite action.
 - **An toàn:** đạt danh sách tự kiểm tra ở mục 6 bài "Script injection"; action bên thứ ba ghim SHA kèm chú thích; có `.github/dependabot.yml`.
@@ -29,7 +29,7 @@ Mentor đọc README, xem các workflow và các lần chạy, rồi chấm theo
 | Tiêu chí | Đạt khi |
 | --- | --- |
 | CI và required checks | PR đỏ thì không merge được; tên check trong ruleset khớp |
-| Deploy | Không chạy trên PR; có `needs` và `environment` có luật |
+| Deploy | Không chạy trên PR; có `needs` tới job test cùng file và `environment` có luật |
 | Matrix, cache hoặc artifact | Dùng đúng, có tác dụng thấy được trong log |
 | Tái sử dụng | Bớt được đoạn lặp, gọi đúng cấp (job hoặc step) |
 | An toàn | Đạt mọi mục của danh sách tự kiểm tra |

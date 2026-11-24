@@ -15,7 +15,7 @@ spec:
   rubric:
     - criterion: "CI: chạy trên pull_request và push lên main, kiểm tra thật (test hoặc link) và đỏ khi có lỗi; ruleset bắt buộc PR và required checks khớp tên check"
       weight: 3
-    - criterion: "Deploy: chỉ từ main, không chạy trên PR, có needs tới CI và environment có luật bảo vệ"
+    - criterion: "Deploy: chỉ từ main, không chạy trên PR, có needs tới job test trong cùng file workflow và environment có luật bảo vệ"
       weight: 2
     - criterion: "Tốc độ và kết quả: dùng đúng ít nhất một trong matrix, cache, artifact"
       weight: 1

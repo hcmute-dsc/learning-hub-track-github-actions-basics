@@ -91,10 +91,10 @@ git push
 
 ## 5. Badge trên README
 
-**Badge** (*huy hiệu*) là ảnh nhỏ hiện "passing" (xanh) hoặc "failing" (đỏ) theo lần chạy gần nhất trên nhánh mặc định. Người khác mở repo là biết ngay `main` có khỏe không. Thêm vào đầu `README.md` (đổi `an/diem-trung-binh` thành repo của bạn):
+**Badge** (*huy hiệu*) là ảnh nhỏ hiện "passing" (xanh) hoặc "failing" (đỏ) theo lần chạy gần nhất trên nhánh mặc định. Người khác mở repo là biết ngay `main` có khỏe không. Thêm vào đầu `README.md` (đổi `ten-ban/diem-trung-binh` thành repo của bạn):
 
 ```markdown
-[![CI](https://github.com/an/diem-trung-binh/actions/workflows/ci.yml/badge.svg)](https://github.com/an/diem-trung-binh/actions/workflows/ci.yml)
+[![CI](https://github.com/ten-ban/diem-trung-binh/actions/workflows/ci.yml/badge.svg)](https://github.com/ten-ban/diem-trung-binh/actions/workflows/ci.yml)
 ```
 
 **Đọc hiểu**

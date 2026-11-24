@@ -11,7 +11,7 @@ authors: [github:TienNHM]
 spec:
   checklist:
     - "Tìm được ít nhất 5 lỗi bảo mật trong workflow mẫu, mỗi lỗi ghi được vì sao nguy hiểm"
-    - "Viết lại workflow mẫu cho an toàn trên máy (không cần push), và actionlint không còn báo potentially untrusted"
+    - "Viết lại workflow mẫu cho an toàn trên máy (không cần push); nếu đã cài Docker, actionlint không còn báo potentially untrusted"
     - "Đi qua danh sách tự kiểm tra ở bài Script injection với mọi workflow trong repo diem-trung-binh"
     - "Mọi job trong repo có permissions đúng việc của nó; không còn ${{ github.event... }} nào nằm thẳng trong run"
     - "Đã thử job thank-you: thấy bình luận của github-actions[bot], và thấy lỗi Resource not accessible by integration khi bỏ pull-requests: write"

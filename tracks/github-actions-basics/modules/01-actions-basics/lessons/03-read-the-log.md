@@ -41,18 +41,18 @@ flowchart LR
   B -- không --> D["Step đỏ, job dừng, các step sau bị bỏ qua"]
 ```
 
-Thử xem exit code trên máy bạn:
+Thử xem exit code trên máy bạn. Đứng trong thư mục một repo Git bất kỳ (ví dụ repo portfolio đã clone), rồi hỏi Git về một file không có:
 
 ```bash
-ls thu-muc-khong-co
+git ls-files --error-unmatch khong-co-file-nay
 echo $?
 ```
 
 **Đọc hiểu**
 
-- `ls thu-muc-khong-co` liệt kê một thư mục không tồn tại, nên báo lỗi.
-- `$?` là biến đặc biệt của bash, giữ exit code của lệnh **vừa chạy**. Bạn sẽ thấy `2` (trên macOS là `1`).
-- Trong **PowerShell**, dùng `echo $LASTEXITCODE` thay cho `echo $?` (với lệnh là chương trình ngoài như `git`); `$?` của PowerShell chỉ in `True`/`False`.
+- `git ls-files` liệt kê các file Git đang theo dõi. `--error-unmatch` bảo nó **báo lỗi** nếu không tìm thấy file được hỏi. File `khong-co-file-nay` không có, nên Git in `error: pathspec 'khong-co-file-nay' did not match any file(s) known to git`.
+- `$?` là biến đặc biệt của bash, giữ exit code của lệnh **vừa chạy**. Bạn sẽ thấy `1`.
+- Trong **PowerShell**, dùng `echo $LASTEXITCODE` thay cho `echo $?`, cũng ra `1`. `$LASTEXITCODE` chỉ có giá trị sau khi chạy một **chương trình ngoài** như `git`, `node`, `npm`; lệnh có sẵn của PowerShell như `ls` (thật ra là `Get-ChildItem`) không đặt nó. Còn `$?` của PowerShell chỉ in `True`/`False`.
 
 Mọi lệnh trong `run` đều theo luật này: test không qua, `curl -f` gặp lỗi HTTP, `grep` không tìm thấy chữ… đều trả về khác 0 và làm job đỏ. Chính nhờ vậy mà CI chặn được lỗi trước khi nó tới tay người dùng.
 

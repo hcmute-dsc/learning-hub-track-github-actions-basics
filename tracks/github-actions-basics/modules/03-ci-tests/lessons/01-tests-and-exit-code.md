@@ -62,7 +62,7 @@ diem-trung-binh/
 
 - **package.json** là file mô tả project: tên, phiên bản, các thư viện cần dùng, và các lệnh tắt.
 - `"private": true`: không cho lỡ tay đăng project lên kho thư viện công khai npm.
-- `"scripts"`: lệnh tắt. `"test": "node --test"` nghĩa là khi gõ `npm test`, npm chạy `node --test`. Node.js có sẵn bộ chạy test: `node --test` tự tìm các file tên `*.test.js` và chạy chúng.
+- `"scripts"`: lệnh tắt. `"test": "node --test"` nghĩa là khi gõ `npm test`, npm chạy `node --test`. Node.js có sẵn bộ chạy test: `node --test` tự tìm file test và chạy chúng: các file tên kiểu `*.test.js`, và các file `.js` nằm trong thư mục `test/`.
 
 **`src/grade.js`**: code thật.
 
@@ -224,7 +224,7 @@ flowchart LR
 | --- | --- | --- |
 | `npm: command not found` / `'npm' is not recognized` | Chưa cài Node.js, hoặc chưa mở lại terminal sau khi cài | Làm mục 2 tab **Cài đặt**, mở terminal mới |
 | `Cannot find module '../src/grade.js'` | Sai tên thư mục hoặc tên file | So lại với cây thư mục ở mục 2 |
-| `tests 0` | File test không có đuôi `.test.js` | Đổi tên thành `grade.test.js` |
+| `tests 0` | Node không tìm thấy file test nào: sai tên, sai thư mục, hoặc chạy lệnh ở ngoài thư mục project | Đặt file đúng `test/grade.test.js` như cây ở mục 2, và chạy `npm test` trong thư mục `diem-trung-binh` |
 | Lỗi khác, hoặc chưa hiểu vì sao | | Nhắn mentor của track, công khai hay **nhắn riêng** đều được (tab **Cài đặt** → "Hỏi ở đâu") |
 
 ## Tóm tắt

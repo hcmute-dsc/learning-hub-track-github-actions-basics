@@ -21,9 +21,10 @@ Bạn cần một repo trên GitHub để thử. Dùng repo **portfolio** (trang
 
 ## 1. YAML trong 2 phút
 
-**YAML** (*YAML Ain't Markup Language*, đọc là "di-a-mồ") là một cách viết dữ liệu cho người đọc dễ. GitHub Actions dùng nó để mô tả workflow. Bạn chỉ cần ba thứ:
+**YAML** (*YAML Ain't Markup Language*, đọc là "di-a-mồ") là một cách viết dữ liệu cho người đọc dễ. GitHub Actions dùng nó để mô tả workflow. Bạn chỉ cần ba thứ. Đoạn dưới **chỉ minh họa cú pháp**, các bước còn trống nên GitHub sẽ báo lỗi: đừng push nó, workflow thật ở mục 2.
 
 ```yaml
+# Chỉ minh họa cú pháp YAML, đừng push
 name: Hello              # khóa: giá trị
 on: push
 
@@ -72,7 +73,7 @@ jobs:
 **Đọc hiểu**
 
 - `name: Hello`: tên workflow, hiện trong tab **Actions**.
-- `on: push`: event. Chạy mỗi lần có commit được push lên **bất kỳ nhánh nào**.
+- `on: push`: event. Chạy mỗi lần có commit được push lên **bất kỳ nhánh nào**, và cả khi push một **tag** (ví dụ `git push origin v1.0`). Muốn giới hạn thì dùng bộ lọc `branches` ở mục 5.
 - `jobs:` mở danh sách job. `hello` là tên job do bạn đặt.
 - `runs-on: ubuntu-latest`: xin một runner chạy Ubuntu, bản mới nhất GitHub hỗ trợ. `runs-on` = *chạy trên*.
 - `steps:` danh sách bước. Mỗi bước có `name` (tên hiện trong log) và **một trong hai**:
@@ -84,10 +85,10 @@ jobs:
 
 ## 3. Biểu thức `${{ }}` và context
 
-`${{ github.repository }}` là một **expression** (*biểu thức*). GitHub thay nó bằng giá trị thật **trước khi** gửi lệnh tới runner. Ví dụ, với repo `an/portfolio`, lệnh thật chạy trên runner là:
+`${{ github.repository }}` là một **expression** (*biểu thức*). GitHub thay nó bằng giá trị thật **trước khi** gửi lệnh tới runner. Ví dụ, với repo `ten-ban/portfolio`, lệnh thật chạy trên runner là:
 
 ```bash
-echo "Xin chào từ an/portfolio, commit 3f2a9c1e..."
+echo "Xin chào từ ten-ban/portfolio, commit 3f2a9c1e..."
 ```
 
 **Đọc hiểu**
@@ -98,9 +99,9 @@ echo "Xin chào từ an/portfolio, commit 3f2a9c1e..."
 
 | Bạn viết | GitHub thay thành (ví dụ) |
 | --- | --- |
-| `${{ github.repository }}` | `an/portfolio` |
+| `${{ github.repository }}` | `ten-ban/portfolio` |
 | `${{ github.ref_name }}` | `main` |
-| `${{ github.actor }}` | `an` |
+| `${{ github.actor }}` | `ten-ban` |
 
 ## 4. Chạy thử
 

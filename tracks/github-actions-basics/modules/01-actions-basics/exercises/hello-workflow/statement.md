@@ -1,6 +1,6 @@
 Thêm workflow `hello.yml` (bài "Viết workflow đầu tiên") vào repo portfolio của bạn, làm nó đỏ một lần rồi sửa cho xanh lại (bài "Khi workflow bị đỏ"). Đánh dấu từng mục khi xong.
 
-Với mục cuối: thêm `workflow_dispatch:` vào `on:` như mục "Chọn event" của bài "Viết workflow đầu tiên". Khi có hơn một event, `on:` phải viết dạng nhiều dòng:
+Với mục cuối: thêm `workflow_dispatch:` vào `on:` như mục "Chọn event" của bài "Viết workflow đầu tiên". Khi có hơn một event, cách dễ đọc nhất là viết `on:` dạng nhiều dòng (viết gọn `on: [push, workflow_dispatch]` cũng đúng):
 
 ```yaml
 on:

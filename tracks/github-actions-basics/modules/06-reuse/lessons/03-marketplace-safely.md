@@ -74,7 +74,7 @@ flowchart LR
 Tìm SHA của một tag:
 
 ```bash
-git ls-remote https://github.com/actions/checkout refs/tags/v7.0.1
+git ls-remote https://github.com/actions/checkout "refs/tags/v7.0.1" "refs/tags/v7.0.1^{}"
 ```
 
 ```text
@@ -84,8 +84,9 @@ git ls-remote https://github.com/actions/checkout refs/tags/v7.0.1
 **Đọc hiểu**
 
 - `git ls-remote` hỏi một repo từ xa xem nó có những nhánh, tag nào, **không cần clone**.
-- `refs/tags/v7.0.1`: chỉ hỏi tag `v7.0.1`. Kết quả: SHA, dấu Tab, tên tag.
-- Nếu thấy thêm dòng kết thúc bằng `^{}` (tag loại "annotated"), dùng SHA của dòng `^{}` đó: đó mới là commit.
+- Hai mẫu trong dấu nháy: tag `v7.0.1`, và `v7.0.1^{}` là "commit mà tag này trỏ tới". Kết quả mỗi dòng: SHA, dấu Tab, tên.
+- Vì sao hỏi cả `^{}`? Có hai loại tag. Tag "nhẹ" (*lightweight*) trỏ thẳng vào commit: chỉ in **một dòng**, như `actions/checkout` ở trên, dùng SHA đó. Tag "có chú thích" (*annotated*) là một đối tượng riêng: in **hai dòng**, và SHA ở dòng đầu là của **đối tượng tag**, không phải commit. Khi đó dùng SHA của dòng kết thúc bằng `^{}`.
+- Hỏi riêng `refs/tags/v7.0.1` (không có dòng `^{}`) thì không bao giờ thấy dòng thứ hai, nên dễ chép nhầm SHA của tag annotated.
 - Cách khác: trang **Releases** của repo action → bấm vào bản phát hành → mã commit hiện cạnh tag.
 
 Nên ghim SHA với action nào? Ít nhất là mọi action **bên thứ ba** (không phải `actions/` hay của chính bạn). Nhiều tổ chức ghim **tất cả**, và GitHub cho phép organization bật luật bắt buộc ghim SHA. Từ chương 7, track này ghim SHA cho action bên thứ ba trong ví dụ.
@@ -100,7 +101,9 @@ Tạo `.github/dependabot.yml`:
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - "/"
+      - "/.github/actions/*"
     schedule:
       interval: weekly
   - package-ecosystem: npm
@@ -112,8 +115,8 @@ updates:
 **Đọc hiểu**
 
 - `version: 2`: phiên bản định dạng file, luôn là 2.
-- Mục thứ nhất: theo dõi action trong `.github/workflows/` (và action dùng trong `.github/actions/`). `directory: /` là gốc repo.
-- Mục thứ hai: theo dõi thư viện npm trong `package.json` ở gốc repo.
+- Mục thứ nhất: theo dõi action. Với `github-actions`, thư mục `"/"` (gốc repo) nghĩa là các file trong `.github/workflows/`. Action dùng **bên trong** composite action của bạn (bài 2) nằm ở chỗ khác, nên thêm `"/.github/actions/*"`: dấu `*` là "mọi thư mục con", tức mọi action trong `.github/actions/`. Có nhiều thư mục thì dùng khóa `directories` (số nhiều) với một danh sách.
+- Mục thứ hai: theo dõi thư viện npm trong `package.json` ở gốc repo. Chỉ một thư mục thì dùng `directory` (số ít).
 - `interval: weekly`: kiểm tra mỗi tuần.
 - File này không phải workflow, không nằm trong `workflows/`.
 

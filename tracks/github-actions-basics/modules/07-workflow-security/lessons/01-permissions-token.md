@@ -10,7 +10,7 @@ objectives:
 prerequisites:
   - github-actions-basics/reuse/marketplace-safely
 authors: [github:TienNHM]
-terms: [GITHUB_TOKEN, least privilege, scope, gh]
+terms: [GITHUB_TOKEN, least privilege, OIDC, gh]
 ---
 
 # GITHUB_TOKEN và permissions tối thiểu
@@ -38,13 +38,15 @@ Bạn không cần tạo nó. `actions/checkout` tự dùng nó. Khi tự gọi 
 | --- | --- | --- | --- |
 | `contents` | đọc code (checkout) | push commit, tạo release | mọi chương |
 | `pages` | | deploy lên GitHub Pages | 2 |
-| `id-token` | | xin giấy tờ chứng minh danh tính workflow (OIDC) | 2 |
+| `id-token` | | xin "giấy tờ tùy thân" của workflow theo chuẩn OIDC (xem dưới bảng) | 2 |
 | `pull-requests` | đọc PR | bình luận, gắn nhãn PR | 7 |
 | `issues` | đọc issue | tạo, bình luận issue | |
 | `packages` | tải package | đẩy package/image lên GitHub Packages | |
 | `actions` | đọc các lần chạy | hủy, chạy lại workflow | |
 
 Scope nào **không ghi** trong `permissions` thì là `none` (không có quyền).
+
+**OIDC** (*OpenID Connect*, một chuẩn chung để chứng minh danh tính trên mạng): với `id-token: write`, job xin GitHub cấp một tờ giấy có chữ ký, ghi "tôi là workflow `pages.yml` của repo này, chạy trên nhánh `main`". Bên nhận (GitHub Pages ở chương 2, hoặc một dịch vụ cloud) kiểm tra chữ ký rồi tin, nên không cần cất mật khẩu hay token lâu dài nào trong secrets.
 
 ## 3. Least privilege: xin đúng thứ cần
 

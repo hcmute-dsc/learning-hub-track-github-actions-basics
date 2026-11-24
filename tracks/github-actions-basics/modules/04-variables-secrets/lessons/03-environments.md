@@ -71,7 +71,7 @@ Trong repo `diem-trung-binh`:
 - Bước 2–3: job vào `production` sẽ dừng chờ bạn duyệt.
 - Bước 4: job chạy từ nhánh khác `main` bị từ chối ngay, không cần ai duyệt.
 - Bước 5: `DEPLOY_TOKEN` chỉ tồn tại trong environment `production`. Job không có `environment: production` đọc `secrets.DEPLOY_TOKEN` thì nhận chuỗi rỗng.
-- Required reviewers miễn phí cho repo **public**; repo private cần gói trả phí.
+- Required reviewers dùng được với mọi repo **public**, kể cả tài khoản miễn phí. Với repo **private**, luật bảo vệ của environment (người duyệt, hẹn giờ) cần gói GitHub Enterprise; gói Pro hay Team cũng không đủ. Vì vậy track dùng repo public.
 
 ## 3. Workflow deploy có duyệt
 

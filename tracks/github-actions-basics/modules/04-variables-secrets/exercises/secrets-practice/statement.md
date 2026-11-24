@@ -10,7 +10,7 @@ Vì ruleset ở chương 3, mỗi workflow mới phải vào `main` qua pull req
 - Biến in ra rỗng: so tên từng chữ, phân biệt hoa thường; xem biến khai báo ở cấp workflow, job hay step.
 - `Độ dài token: 0`: secret sai tên, hoặc `DEPLOY_TOKEN` được tạo ở **Repository secrets** thay vì **Environment secrets** của `production`.
 - Không thấy nút Approve: thêm chính bạn vào Required reviewers và tắt **Prevent self-review**.
-- Repo private: Required reviewers cần gói trả phí. Chuyển repo sang public.
+- Repo private: Required reviewers với repo private cần gói GitHub Enterprise. Chuyển repo sang public.
 - Vẫn kẹt: hỏi trong kênh Discord của track hoặc nhắn riêng mentor, gửi kèm link lần chạy.
 
 </details>

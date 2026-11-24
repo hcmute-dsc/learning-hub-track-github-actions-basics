@@ -243,7 +243,7 @@
 - term: badge
   literal: huy hiệu
   meaning: Ảnh nhỏ trong README hiện passing hoặc failing theo lần chạy gần nhất của một workflow.
-  example: "[![CI](https://github.com/an/diem-trung-binh/actions/workflows/ci.yml/badge.svg)](...)"
+  example: "[![CI](https://github.com/ten-ban/diem-trung-binh/actions/workflows/ci.yml/badge.svg)](...)"
 
 # Chương 4
 - term: environment variable
@@ -278,7 +278,7 @@
   see: [masking, rotate, token]
 
 - term: masking
-  literal: che mặt nạ
+  literal: che bằng mặt nạ
   meaning: Runner thay mọi chỗ trùng đúng chuỗi secret trong log bằng ***. Chuỗi đã biến đổi thì không được che.
   example: "echo \"::add-mask::$GIA_TRI\""
   see: [secret]
@@ -389,7 +389,7 @@
 
 - term: pipefail
   literal: ống hỏng thì báo hỏng
-  meaning: Tùy chọn của bash làm cả dòng lệnh có ống | thất bại nếu một lệnh bất kỳ trong ống thất bại. GitHub bật sẵn khi chạy bash.
+  meaning: Tùy chọn của bash làm cả dòng lệnh có ống | thất bại nếu một lệnh bất kỳ trong ống thất bại. GitHub chỉ bật nó khi step ghi rõ shell bash; mặc định thì không.
   example: "npm test 2>&1 | tee test-report.txt"
   see: [exit code]
 
@@ -504,13 +504,25 @@
   meaning: Lệnh gh làm việc với GitHub từ terminal; có sẵn trên runner, đọc token từ biến GH_TOKEN.
   example: "gh pr comment \"$PR_NUMBER\" --body \"Cảm ơn bạn!\""
 
+- term: OIDC
+  expansion: OpenID Connect
+  literal: kết nối danh tính mở
+  meaning: Chuẩn chung để chứng minh danh tính. Với id-token write, job xin GitHub một giấy có chữ ký nói nó là workflow nào của repo nào; bên nhận kiểm tra chữ ký rồi tin, không cần cất mật khẩu lâu dài.
+  example: "permissions: { id-token: write }"
+  see: [permissions, GITHUB_TOKEN]
+
+- term: lint
+  literal: xơ vải, gỡ xơ vải
+  meaning: Chạy công cụ đọc code (không chạy nó) để tìm lỗi và chỗ viết sai quy ước, như actionlint với file workflow.
+  see: [actionlint]
+
 - term: fork
   literal: rẽ nhánh
   meaning: Bản chép một repo sang tài khoản khác; người đó sửa được mọi thứ rồi mở PR về repo gốc.
   see: [untrusted, pull_request_target]
 
 - term: pull_request_target
-  literal: pull request, phía đích
+  literal: đích của pull request (nhánh nhận)
   meaning: Event chạy workflow của nhánh chính với secret và token ghi, kể cả cho PR từ fork. Không bao giờ checkout và chạy code của PR trong đó.
   see: [pwn request, fork]
 
