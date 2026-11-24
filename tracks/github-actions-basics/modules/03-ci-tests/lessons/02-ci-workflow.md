@@ -118,7 +118,25 @@ git push -u origin sua-xep-loai
 - `git commit -am` commit mọi file đã theo dõi có thay đổi; `git push -u origin sua-xep-loai` đẩy nhánh lên GitHub.
 - Trên trang repo, GitHub hiện nút **Compare & pull request**. Bấm, rồi **Create pull request**.
 
-Ở cuối trang PR, mục kiểm tra hiện chấm vàng rồi dấu X đỏ: `CI / test (pull_request)` thất bại. Bấm **Details** để mở log, tìm step **Chạy test**, đọc từ dưới lên như chương 1. Bạn sẽ thấy `classify(8.5)` trả về `'Khá'` trong khi test mong `'Giỏi'`.
+Ở cuối trang PR, mục kiểm tra hiện chấm vàng rồi dấu X đỏ: `CI / test (pull_request)` thất bại. Bấm **Details** để mở log, tìm step **Chạy test**, đọc từ dưới lên như chương 1. Log thật của lần chạy thử (rút gọn):
+
+```text
+✖ classify xếp loại đúng (0.70ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  'Khá' !== 'Giỏi'
+
+      at TestContext.<anonymous> (/home/runner/work/diem-trung-binh/diem-trung-binh/test/grade.test.js:15:10)
+    actual: 'Khá',
+    expected: 'Giỏi',
+Error: Process completed with exit code 1.
+```
+
+**Đọc hiểu**
+
+- `'Khá' !== 'Giỏi'`: code trả về `'Khá'`, test mong `'Giỏi'` (`!==` là "khác"). Đây là kiểu so sánh gọn mà Node dùng cho chuỗi ngắn; bài trước bạn thấy kiểu `+ actual - expected`. Hai dòng `actual:` / `expected:` thì luôn có.
+- `grade.test.js:15:10`: dòng 15 là `assert.equal(classify(8.5), "Giỏi")`. Vậy `classify(8.5)` đang trả về `'Khá'`.
+- `/home/runner/work/...`: đường dẫn trên runner, không phải máy bạn.
 
 Có hai cách xử lý, và **chính bạn** phải quyết định cách nào đúng:
 

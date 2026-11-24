@@ -18,7 +18,7 @@ Quy trình chung của dự án (vòng đời bug, review, Definition of Done): 
 
 ## Viết bài dễ hiểu
 
-Mọi bài học và bài tập phải đạt 6 tiêu chí trong [TEACHING.md](TEACHING.md): từ vựng, giải thích trước khi thực hành, mô hình tư duy, quy trình thực tế, cài đặt, hỏi bài. Bài mẫu áp dụng đủ 6 tiêu chí: [`03-teaching-standard.md`](tracks/example-track/modules/01-getting-started/lessons/03-teaching-standard.md). Mẫu Pull Request có checklist để tự kiểm tra; người review kiểm tra lại theo đúng checklist đó.
+Mọi bài học và bài tập phải đạt 6 tiêu chí trong [TEACHING.md](TEACHING.md): từ vựng, giải thích trước khi thực hành, mô hình tư duy, quy trình thực tế, cài đặt, hỏi bài. Bài mẫu áp dụng đủ 6 tiêu chí: [`02-ci-workflow.md`](tracks/github-actions-basics/modules/03-ci-tests/lessons/02-ci-workflow.md) (chương 3, "Workflow CI": có từ vựng, phần Đọc hiểu sau mỗi khối lệnh, sơ đồ, Ngoài thực tế, bảng Khi bị lỗi). Mẫu Pull Request có checklist để tự kiểm tra; người review kiểm tra lại theo đúng checklist đó.
 
 ## Quy tắc quan trọng
 

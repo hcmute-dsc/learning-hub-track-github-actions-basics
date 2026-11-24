@@ -116,7 +116,22 @@ git push
 - `git add` đưa file workflow vào commit tiếp theo; `git commit` chốt; `git push` gửi lên GitHub.
 - Chính lệnh `git push` là **event** `push` đánh thức workflow.
 
-Mở repo trên GitHub, vào tab **Actions**. Bạn sẽ thấy một lần chạy mang tên commit message, chấm vàng (đang chạy) rồi dấu tick xanh. Bấm vào lần chạy, chọn job `hello`, mở từng step để xem output. Step **Chào** in tên repo và mã commit của bạn.
+Mở repo trên GitHub, vào tab **Actions**. Bạn sẽ thấy một lần chạy mang tên commit message, chấm vàng (đang chạy) rồi dấu tick xanh. Bấm vào lần chạy, chọn job `hello`, mở từng step để xem output. Ngoài ba step bạn viết, GitHub tự thêm step **Set up job** ở đầu (chuẩn bị máy) và **Complete job** ở cuối (dọn dẹp).
+
+Mở step **Chào**. Đây là log thật của một lần chạy thử (repo khác của bạn sẽ khác tên và mã commit):
+
+```text
+Run echo "Xin chào từ ten-ban/portfolio, commit 134130cedc6d21de4fc7d3d5b32e02055f8aceb9"
+  echo "Xin chào từ ten-ban/portfolio, commit 134130cedc6d21de4fc7d3d5b32e02055f8aceb9"
+  shell: /usr/bin/bash -e {0}
+Xin chào từ ten-ban/portfolio, commit 134130cedc6d21de4fc7d3d5b32e02055f8aceb9
+```
+
+**Đọc hiểu**
+
+- Dòng `Run echo ...` là lệnh runner **nhận được**: biểu thức `${{ }}` đã được thay bằng giá trị thật từ trước. Runner không hề thấy chữ `${{ github.repository }}`.
+- `shell: /usr/bin/bash -e {0}`: runner chạy lệnh bằng bash; `-e` nghĩa là dừng ngay khi có lệnh lỗi (bài sau).
+- Dòng cuối là output của `echo`.
 
 Repo **public** chạy Actions miễn phí. Repo private dùng vào số phút miễn phí hằng tháng của tài khoản.
 
@@ -154,7 +169,7 @@ on:
 - Dùng Tab để thụt lề: `Invalid workflow file`.
 - Viết `uses` và `run` trong **cùng một** step: mỗi step chỉ chọn một.
 - Quên `@v7`: GitHub báo lỗi vì không biết dùng phiên bản nào.
-- Viết `run: echo "Kết quả: xong"` trên một dòng: chữ `: ` (dấu hai chấm rồi dấu cách) bên trong làm YAML tưởng có thêm một khóa, báo `mapping values are not allowed`. Cách chắc ăn: viết `run: |` rồi đặt lệnh ở dòng dưới, thụt vào thêm 2 dấu cách:
+- Viết `run: echo "Kết quả: xong"` trên một dòng: chữ `: ` (dấu hai chấm rồi dấu cách) bên trong làm YAML tưởng có thêm một khóa. Khi chạy thử thật, lần chạy đỏ ngay, mang tên đường dẫn file (`.github/workflows/hello.yml`) thay cho commit message, và trang lần chạy báo `Invalid workflow file` kèm `You have an error in your yaml syntax on line 15` (số dòng của bạn có thể khác). Cách chắc ăn: viết `run: |` rồi đặt lệnh ở dòng dưới, thụt vào thêm 2 dấu cách:
 
   ```yaml
         run: |
@@ -170,7 +185,7 @@ Trong nhóm, file workflow được review như code: nó nằm trong repo, đi 
 | Lỗi | Vì sao | Cách sửa |
 | --- | --- | --- |
 | Tab Actions không có lần chạy nào | File sai thư mục hoặc sai đuôi | Đường dẫn phải là `.github/workflows/<tên>.yml` |
-| `Invalid workflow file` | Lỗi YAML | Mở file trên GitHub, dòng lỗi được tô đỏ; thường là Tab hoặc thiếu dấu cách sau `:` |
+| `Invalid workflow file`, kèm `You have an error in your yaml syntax on line N` | Lỗi YAML | Mở dòng N của file; thường là Tab, thiếu dấu cách sau `:`, hoặc `: ` nằm trong lệnh `run` một dòng |
 | `ls -la` chỉ thấy `.` và `..` | Thiếu step checkout | Thêm `uses: actions/checkout@v7` làm step đầu |
 | Lỗi khác, hoặc chưa hiểu vì sao | | Nhắn mentor của track, công khai hay **nhắn riêng** đều được (tab **Cài đặt** → "Hỏi ở đâu") |
 

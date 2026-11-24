@@ -15,6 +15,8 @@ terms: [reusable workflow, workflow_call, caller, input, output, DRY]
 
 # Reusable workflow: gọi cả một workflow như gọi hàm
 
+> **Chương nâng cao.** Chương 6 và 7 có thể học sau chương 5, khi bạn đã quen viết workflow. Dự án cuối (chương 8) cần cả hai chương này.
+
 Repo của bạn giờ có `ci.yml`, `report.yml`, `deploy-demo.yml`, và cả ba đều lặp lại cùng một đoạn: checkout → setup-node → `npm ci` → `npm test`. Muốn đổi cách cài (ví dụ thêm cache) là phải sửa ba chỗ, sót một chỗ là ba workflow chạy ba kiểu. Lập trình viên gọi nguyên tắc tránh điều này là **DRY** (*Don't Repeat Yourself*, *đừng lặp lại chính mình*).
 
 Chương này có hai công cụ để không lặp lại: **reusable workflow** (bài này) và **composite action** (bài sau).
@@ -116,7 +118,7 @@ jobs:
 - `./.github/workflows/node-test.yml`: đường dẫn trong **cùng repo**, bắt đầu bằng `./`.
 - `with: node-version: ...`: truyền input. Kết hợp với matrix: mỗi giá trị matrix gọi workflow một lần.
 
-Mở PR: check bây giờ có tên dạng `CI / test (22) / run-tests (pull_request)`: tên job gọi, rồi tên job bên trong. Required check trong ruleset cũng phải đổi theo: `test (22) / run-tests` và hai check tương tự cho 24, 26.
+Mở PR: check bây giờ có tên dạng `CI / test (22) / run-tests (pull_request)`: tên job gọi, rồi tên job bên trong (lần chạy thử ra đúng ba check `test (22) / run-tests`, `test (24) / run-tests`, `test (26) / run-tests`). Trong tab **Actions**, `node-test.yml` cũng hiện thành một workflow riêng tên **Node test (reusable)**, nhưng nó chỉ chạy khi được gọi. Required check trong ruleset cũng phải đổi theo: `test (22) / run-tests` và hai check tương tự cho 24, 26.
 
 ## 4. Secret không tự đi theo
 

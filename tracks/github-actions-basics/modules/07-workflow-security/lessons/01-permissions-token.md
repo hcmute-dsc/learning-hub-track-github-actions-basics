@@ -15,6 +15,8 @@ terms: [GITHUB_TOKEN, least privilege, OIDC, gh]
 
 # GITHUB_TOKEN và permissions tối thiểu
 
+> **Chương nâng cao.** Có thể học sau chương 5, nhưng hãy học trước khi làm dự án cuối: dự án cuối được chấm theo danh sách tự kiểm tra của chương này.
+
 Workflow của bạn chạy code với quyền ghi lên repo, lên GitHub Pages, lên PR. Kẻ xấu chiếm được workflow là chiếm được những quyền đó. Chương này gom các quy tắc an toàn bạn đã dùng rải rác từ chương 2, giải thích **vì sao**, và thêm những lỗ hổng hay gặp nhất.
 
 ## 1. GITHUB_TOKEN là chìa khóa tạm của mỗi job
@@ -89,6 +91,20 @@ flowchart TD
 
 **Không ghi `permissions` ở đâu cả** thì token nhận **quyền mặc định** trong Settings của repo hoặc organization (**Settings** → **Actions** → **General** → **Workflow permissions**). Repo cũ có thể vẫn để mặc định là đọc **và ghi** mọi thứ. Đừng phụ thuộc vào cài đặt bạn không nhìn thấy trong file: luôn ghi rõ. Muốn tắt hết quyền, ghi `permissions: {}`.
 
+**Xem token thật có quyền gì.** Mở bất kỳ job nào, mở step **Set up job**, tìm mục **GITHUB_TOKEN Permissions**. Log thật của job `test` (workflow ghi `permissions: contents: read`) trong lần chạy thử:
+
+```text
+GITHUB_TOKEN Permissions
+Contents: read
+Metadata: read
+```
+
+**Đọc hiểu**
+
+- `Contents: read`: đúng như `permissions` đã ghi.
+- `Metadata: read`: quyền đọc thông tin cơ bản của repo (tên, mô tả…). GitHub luôn thêm nó, bạn không cần ghi.
+- Mọi scope khác không có trong danh sách, tức là `none`. Đây là cách nhanh nhất để kiểm tra `permissions` của bạn có tác dụng như ý không.
+
 ## 4. Thử: một job cần quyền ghi
 
 Job dưới đây viết bình luận cảm ơn lên PR. Thêm vào `ci.yml` của repo `diem-trung-binh`:
@@ -115,7 +131,7 @@ Job dưới đây viết bình luận cảm ơn lên PR. Thêm vào `ci.yml` c�
 - `PR_NUMBER`: số thứ tự của PR, lấy từ context `github.event` (thông tin chi tiết của event). Đưa qua `env` rồi đọc `$PR_NUMBER`, như quy tắc ở chương 4.
 - `gh pr comment ... --body "..."`: viết một bình luận lên PR đó.
 
-Mở một PR: bình luận xuất hiện, tác giả là `github-actions[bot]`.
+Mở một PR: bình luận "Cảm ơn bạn! CI đang chạy." xuất hiện, tác giả là bot `github-actions` (lần chạy thử đã ra đúng như vậy). Mục **GITHUB_TOKEN Permissions** của job này ghi `Metadata: read` và `PullRequests: write`.
 
 Bây giờ **xóa** dòng `pull-requests: write` (để `permissions:` chỉ còn `contents: read` chẳng hạn) và push lại. Step đỏ với:
 

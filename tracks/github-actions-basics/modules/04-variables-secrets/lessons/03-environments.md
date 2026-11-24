@@ -126,7 +126,17 @@ Merge workflow vào `main` (qua PR, vì ruleset chương 3), rồi tab **Actions
 
 Chạy lần nữa và bấm **Reject**: job `deploy` dừng, không bao giờ chạy, và không bao giờ nhận token.
 
-Thử chọn một nhánh khác `main` trong ô **Use workflow from** khi bấm **Run workflow**: job `deploy` bị từ chối ngay vì luật nhánh.
+Thử chọn một nhánh khác `main` trong ô **Use workflow from** khi bấm **Run workflow**: job `test` vẫn chạy, còn job `deploy` đỏ sau 1–2 giây, không chờ ai duyệt. Lần chạy thử thật báo:
+
+```text
+Branch "thu-nhanh" is not allowed to deploy to production due to environment protection rules.
+The deployment was rejected or didn't satisfy other protection rules.
+```
+
+**Đọc hiểu**
+
+- Dòng 1: nhánh `thu-nhanh` không nằm trong **Deployment branches** của `production`, nên GitHub từ chối ngay.
+- Dòng 2: lời kết chung khi một luật bảo vệ không qua. Job không bao giờ bắt đầu, nên cũng không bao giờ nhận `DEPLOY_TOKEN`.
 
 ![Sơ đồ trang lần chạy khi chờ duyệt: job test xanh, job deploy có biểu tượng đồng hồ và chữ Waiting; khung vàng nói production cần review với nút Review deployments; hộp thoại có ô chọn production và hai nút Approve and deploy và Reject.](../../../assets/environment-approval.png)
 
@@ -147,7 +157,7 @@ Quy trình hay gặp: merge vào `main` → tự deploy lên **staging** → nh�
 | Lỗi | Vì sao | Cách sửa |
 | --- | --- | --- |
 | Không có nút Approve | Bạn chưa có trong Required reviewers, hoặc **Prevent self-review** đang bật | Sửa trong Settings → Environments → `production` |
-| `Branch "..." is not allowed to deploy to production` | Luật nhánh chỉ cho `main` | Chạy từ `main` |
+| `Branch "..." is not allowed to deploy to production due to environment protection rules.` | Luật nhánh chỉ cho `main` | Chạy từ `main` |
 | `Có token deploy: 0 ký tự` | Secret tạo ở repo thay vì environment, hoặc sai tên | Tạo lại trong **Environment secrets** |
 | Lỗi khác, hoặc chưa hiểu vì sao | | Nhắn mentor của track, công khai hay **nhắn riêng** đều được (tab **Cài đặt** → "Hỏi ở đâu") |
 

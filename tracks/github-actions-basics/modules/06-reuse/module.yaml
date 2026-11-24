@@ -1,7 +1,7 @@
 uid: 40de9454-17d3-4b16-b9a5-c175e6ef7b06
 slug: reuse
 title: "Tái sử dụng workflow và action"
-summary: "Không chép đi chép lại YAML: gom cả job thành reusable workflow, gom vài step thành composite action, và chọn action trên Marketplace một cách an toàn bằng cách ghim commit SHA."
+summary: "Nâng cao, có thể học sau chương 5. Không chép đi chép lại YAML: gom cả job thành reusable workflow, gom vài step thành composite action, và chọn action trên Marketplace một cách an toàn bằng cách ghim commit SHA."
 lessons:
   - 01-reusable-workflow
   - 02-composite-action

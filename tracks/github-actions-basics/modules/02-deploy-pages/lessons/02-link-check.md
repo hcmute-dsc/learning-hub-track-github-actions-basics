@@ -10,7 +10,7 @@ objectives:
 prerequisites:
   - github-actions-basics/deploy-pages/pages-workflow
 authors: [github:TienNHM]
-terms: [CI, CD, lychee, needs, if]
+terms: [CI, CD, lychee, if]
 ---
 
 # Chặn link hỏng trước khi deploy
@@ -23,17 +23,18 @@ terms: [CI, CD, lychee, needs, if]
 
 Ta dùng nó qua action `lycheeverse/lychee-action`, nên không cần cài gì lên máy.
 
-## 2. Hai job nối nhau bằng `needs`
+## 2. Ba job nối nhau bằng `needs`
 
-Nhớ lại chương 1: các job **mặc định chạy song song**. Nếu `check-links` và `deploy` chạy cùng lúc, link hỏng vẫn được deploy trước khi kiểm tra kịp báo đỏ. **`needs`** (*cần*) bắt một job chờ job khác:
+Bài trước đã có `needs: build`. Nhớ lại chương 1: các job **mặc định chạy song song**. Nếu `check-links` chạy song song với `build` và `deploy`, link hỏng vẫn được deploy trước khi kiểm tra kịp báo đỏ. Ta nối thành một chuỗi: `check-links` → `build` → `deploy`.
 
 ```mermaid
 flowchart LR
   P["push lên main"] --> C["job check-links"]
-  C -- xanh --> D["job deploy"]
-  C -- đỏ --> X["deploy bị bỏ qua, trang cũ giữ nguyên"]
+  C -->|"xanh"| B["job build"]
+  B --> D["job deploy"]
+  C -->|"đỏ"| X["build, deploy bị bỏ qua, trang cũ giữ nguyên"]
   PR["pull request"] --> C2["job check-links"]
-  C2 --> S["job deploy: bỏ qua vì if"]
+  C2 --> S["build bỏ qua vì if, deploy bỏ qua theo"]
 ```
 
 ## 3. Workflow hoàn chỉnh
@@ -65,22 +66,11 @@ jobs:
           args: --offline --no-progress '**/*.html'
           fail: true
 
-  deploy:
+  build:
     needs: check-links
-    # Chỉ deploy khi push lên main hoặc bấm Run workflow, không deploy từ pull request
+    # Chỉ đóng gói và deploy khi push lên main hoặc bấm Run workflow, không làm từ pull request
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    # Không cho hai lần deploy chạy chồng lên nhau
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
 
@@ -91,6 +81,20 @@ jobs:
         with:
           path: .
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    # Không cho hai lần deploy chạy chồng lên nhau
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy lên GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
@@ -103,8 +107,9 @@ jobs:
   - `lycheeverse/lychee-action@v2.9.0`: ghi đủ `v2.9.0` để biết chính xác bản đang chạy (tag `v2` cũng có, trỏ tới bản `v2.x` mới nhất).
   - `args`: tham số truyền cho lychee. `--offline` chỉ kiểm tra link trong repo; `--no-progress` tắt thanh tiến trình cho log gọn; `'**/*.html'` là mọi file `.html` ở mọi thư mục (`**` = mọi thư mục con). Giữ dấu nháy đơn để lychee tự tìm file.
   - `fail: true`: có link hỏng thì step đỏ (exit code khác 0).
-- `needs: check-links`: job `deploy` chờ `check-links` xong và **chỉ chạy khi nó xanh**.
-- `if: github.event_name != 'pull_request'`: **`if`** (*nếu*) là điều kiện; sai thì job bị bỏ qua (màu xám, *skipped*). `github.event_name` là tên event đã kích hoạt lần chạy, `!=` là "khác". Đọc cả dòng: "chỉ chạy nếu event **không phải** pull request". Trên PR ta chỉ kiểm tra, không deploy bản chưa được duyệt.
+- `needs: check-links`: job `build` chờ `check-links` xong và **chỉ chạy khi nó xanh**. Job `deploy` vẫn `needs: build` như bài trước.
+- `if: github.event_name != 'pull_request'`: **`if`** (*nếu*) là điều kiện; sai thì job bị bỏ qua (màu xám, *skipped*). `github.event_name` là tên event đã kích hoạt lần chạy, `!=` là "khác". Đọc cả dòng: "chỉ chạy nếu event **không phải** pull request". Trên PR ta chỉ kiểm tra, không đóng gói, không deploy bản chưa được duyệt.
+- Job `deploy` không cần `if` riêng: job nó `needs` (`build`) bị bỏ qua thì nó cũng bị bỏ qua. Trên PR, bạn thấy `check-links` xanh, còn `build` và `deploy` đều **skipped**.
 
 ## 4. Thử làm hỏng
 
@@ -123,25 +128,35 @@ git push -u origin thu-link-hong
 - `git commit -am`: `-a` = *all*, tự `add` mọi file đã theo dõi có thay đổi; `-m` = *message*.
 - `git push -u origin thu-link-hong`: đẩy nhánh lên GitHub; `-u` nhớ nhánh trên GitHub để lần sau chỉ cần `git push`.
 
-Mở pull request từ nhánh đó trên GitHub. Job `check-links` đỏ, log có dạng:
+Mở pull request từ nhánh đó trên GitHub. Job `check-links` đỏ. Cuối log của step **Kiểm tra link hỏng** có một bản tóm tắt (log thật, rút gọn vài dòng có số 0):
 
 ```text
-Issues found in 1 input. Find details below.
+# Summary
 
-[index.html]:
-[ERROR] file:///home/runner/work/portfolio/portfolio/abuot.html (at 12:15) | File not found. Check if file exists and path is correct
+| Status         | Count |
+|----------------|-------|
+| 🔍 Total       | 3     |
+| ✅ Successful  | 2     |
+| 🚫 Errors      | 1     |
 
-🔍 9 Total 🔗 9 Unique ✅ 8 OK 🚫 1 Error
+## Errors per input
+
+### Errors in index.html
+
+* [ERROR] <file:///home/runner/work/portfolio/portfolio/abuot.html> (at 1:106) | File not found. Check if file exists and path is correct
+
+Error: Process completed with exit code 2.
 ```
 
 **Đọc hiểu**
 
-- `[index.html]:` là file **chứa** link hỏng.
+- Bảng `Summary`: lychee tìm được 3 link, 2 tốt, 1 lỗi. Số của bạn sẽ khác, tuỳ trang.
+- `### Errors in index.html`: file **chứa** link hỏng.
 - `file:///home/runner/work/portfolio/portfolio/` là thư mục repo **trên runner** (checkout đặt code ở đó). Đây là bằng chứng lychee chạy trên máy ảo, không phải máy bạn.
-- `abuot.html` là file mà link trỏ tới nhưng không có. `(at 12:15)` là dòng 12, cột 15 trong `index.html`.
-- Dòng cuối đếm: 9 link, 8 tốt, 1 lỗi. Số của bạn sẽ khác, tuỳ trang.
+- `abuot.html` là file mà link trỏ tới nhưng không có. `(at 1:106)` là dòng 1, cột 106 trong `index.html`.
+- Bảng này cũng hiện ở trang lần chạy, mục **Summary**, dễ đọc hơn log.
 
-Sửa lại, commit, push lên nhánh: PR tự chạy lại và xanh. Job `deploy` trên PR luôn hiện **skipped**.
+Sửa lại, commit, push lên nhánh: PR tự chạy lại và xanh. Job `build` và `deploy` trên PR luôn hiện **skipped**.
 
 ## 5. Kiểm tra cả link ra ngoài?
 
@@ -162,11 +177,11 @@ Bỏ `--offline` thì lychee kiểm tra cả link tới LinkedIn, GitHub… Có 
 | Lỗi | Vì sao | Cách sửa |
 | --- | --- | --- |
 | `check-links` đỏ dù trang mở được trên máy | Sai hoa thường tên file (Windows, macOS không phân biệt, runner Linux thì có) | Đổi link cho khớp đúng tên file |
-| `deploy` chạy trên PR | Thiếu hoặc sai dòng `if` | Chép lại đúng dòng `if` ở mục 3 |
+| `build`, `deploy` chạy trên PR | Thiếu hoặc sai dòng `if` của job `build` | Chép lại đúng dòng `if` ở mục 3 |
 | Lỗi khác, hoặc chưa hiểu vì sao | | Gửi link lần chạy cho mentor, công khai hay **nhắn riêng** đều được (tab **Cài đặt** → "Hỏi ở đâu") |
 
 ## Tóm tắt
 
 - CI kiểm tra tự động mỗi lần thay đổi; lychee `--offline` bắt link hỏng trong repo.
-- `needs` nối job: deploy chỉ chạy khi kiểm tra xanh.
+- `needs` nối job thành chuỗi `check-links` → `build` → `deploy`: chỉ deploy khi kiểm tra xanh.
 - `if: github.event_name != 'pull_request'`: trên PR chỉ kiểm tra, không deploy.

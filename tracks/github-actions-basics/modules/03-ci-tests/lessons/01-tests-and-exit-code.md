@@ -183,6 +183,11 @@ test at test/grade.test.js:14:1
 
   + 'Yếu'
   - 'Trung bình'
+
+      at TestContext.<anonymous> (.../test/grade.test.js:17:10)
+      ...
+    actual: 'Yếu',
+    expected: 'Trung bình',
 1
 ```
 
@@ -192,6 +197,8 @@ test at test/grade.test.js:14:1
 - `✖ classify xếp loại đúng`: ca test nào trượt.
 - `test at test/grade.test.js:14:1`: ca test đó bắt đầu ở dòng 14 của file test.
 - `+ actual` là giá trị code **thật sự** trả về (`'Yếu'`); `- expected` là giá trị test **mong đợi** (`'Trung bình'`). Vậy `classify(5)` đang sai.
+- `grade.test.js:17:10`: dòng 17 là đúng dòng `assert.equal(classify(5), ...)` bị trượt.
+- Hai dòng `actual:` và `expected:` nói lại điều đó, và **luôn có** trong log. Phần so sánh phía trên thì đổi kiểu tùy phiên bản Node và độ dài chuỗi: có lúc là `+ actual - expected` như trên, có lúc gọn một dòng như `'Khá' !== 'Giỏi'`, trong terminal có màu thì chữ được tô màu từng ký tự. Không chắc thì tìm hai dòng `actual:` / `expected:`.
 - Số `1` cuối cùng là exit code (in bởi `echo $?`; trong PowerShell dùng `echo $LASTEXITCODE`). **Test trượt thì `npm test` trả về khác 0.**
 
 Đây là mảnh ghép nối chương 1 với chương này: runner thấy exit code khác 0 nên đánh step đỏ. Test trượt → `npm test` trả về 1 → step đỏ → job đỏ → pull request hiện dấu X.
